@@ -1039,16 +1039,10 @@ export function useGetReviews() {
     queryFn: async () => {
       if (!actor) return [];
       try {
-        const reviews = await actor.getReviews();
-        // If no reviews exist, return default placeholder reviews
-        if (reviews.length === 0) {
-          try {
-            return await actor.getDefaultReviews();
-          } catch {
-            return [];
-          }
-        }
-        return reviews;
+        // Return only real admin-created reviews. When none exist, return an
+        // empty array — do NOT fall back to getDefaultReviews() placeholder
+        // reviews, which would mask the real (empty) admin state.
+        return await actor.getReviews();
       } catch (err) {
         console.error("useGetReviews error:", err);
         return [];

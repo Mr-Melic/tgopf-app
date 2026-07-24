@@ -1,10 +1,10 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState } from "react";
 import type { Review } from "../backend";
-import { BOOK_TITLES } from "../constants/books";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import {
   useGetEmojiSystemEnabled,
+  useGetReviewBookTitles,
   useGetReviewEmojiV2,
   useGetUserReviewReactionV2,
   useReactToReviewV2,
@@ -52,6 +52,11 @@ const ReviewsSection = React.memo(function ReviewsSection({
   disableAnimations,
 }: ReviewsSectionProps) {
   const { data: emojiEnabled } = useGetEmojiSystemEnabled();
+  // Book titles that actually have reviews, sourced from the backend's
+  // getReviewBookTitles() endpoint. This avoids showing filter buttons for
+  // titles with no reviews (e.g. packaging variants like "Amazon TGOPF
+  // Editions" or any title the admin has not yet attached a review to).
+  const { data: reviewBookTitles = [] } = useGetReviewBookTitles();
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [activeBookFilter, setActiveBookFilter] = useState<string>(ALL_FILTER);
 
@@ -104,8 +109,9 @@ const ReviewsSection = React.memo(function ReviewsSection({
           What Readers Say
         </h3>
 
-        {/* Book-title filter bar — one compact bar-style button per title,
-            plus an "All" option as the first button. Wraps on mobile. */}
+        {/* Book-title filter bar — one compact bar-style button per title that
+            actually has reviews (sourced from the backend), plus an "All"
+            option as the first button. Wraps on mobile. */}
         <fieldset
           className="flex flex-wrap justify-center gap-2 mb-8"
           aria-label="Filter reviews by book"
@@ -116,21 +122,14 @@ const ReviewsSection = React.memo(function ReviewsSection({
             isActive={activeBookFilter === ALL_FILTER}
             onClick={() => setActiveBookFilter(ALL_FILTER)}
           />
-          {/* "Amazon TGOPF Editions" is intentionally excluded from the public
-              review filter bar — it is a packaging variant, not a reviewable
-              title. The shared BOOK_TITLES constant is NOT mutated so other
-              surfaces (admin review dropdown, products manager) still see all
-              6 titles. */}
-          {BOOK_TITLES.filter((title) => title !== "Amazon TGOPF Editions").map(
-            (title) => (
-              <FilterButton
-                key={title}
-                label={title}
-                isActive={activeBookFilter === title}
-                onClick={() => setActiveBookFilter(title)}
-              />
-            ),
-          )}
+          {reviewBookTitles.map((title) => (
+            <FilterButton
+              key={title}
+              label={title}
+              isActive={activeBookFilter === title}
+              onClick={() => setActiveBookFilter(title)}
+            />
+          ))}
         </fieldset>
 
         {displayReviews.length === 0 ? (
@@ -138,7 +137,7 @@ const ReviewsSection = React.memo(function ReviewsSection({
             className="text-center py-12 text-gray-500"
             data-ocid="reviews.empty_state"
           >
-            No reviews for this book yet.
+            No reviews yet.
           </div>
         ) : (
           <div

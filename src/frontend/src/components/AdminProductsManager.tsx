@@ -93,6 +93,7 @@ export default function AdminProductsManager() {
       const updatedProduct: Product = {
         ...product,
         frontCoverImagePath: coverPath,
+        hasCustomImage: true,
       };
       await updateProductByKey.mutateAsync({
         textKey: product.id,
@@ -144,6 +145,7 @@ export default function AdminProductsManager() {
       const updatedProduct: Product = {
         ...product,
         frontCoverImagePath: undefined,
+        hasCustomImage: false,
       };
       await updateProductByKey.mutateAsync({
         textKey: product.id,
@@ -165,6 +167,62 @@ export default function AdminProductsManager() {
         error instanceof Error ? error.message : "Failed to delete front cover",
       ]);
       toast.error("Failed to delete front cover", { id: "delete-cover" });
+
+      setTimeout(() => setSaveStatus("idle"), 5000);
+    }
+  };
+
+  // Sync cover flag: repairs a stale hasCustomImage flag without re-uploading
+  // the cover. Sets it to true when a frontCoverImagePath exists but the flag
+  // is false, and to false when no path exists but the flag is true. No-op
+  // (with a toast) when the flag is already consistent with the path state.
+  const handleSyncCoverFlag = async (product: Product) => {
+    const hasPath = Boolean(product.frontCoverImagePath);
+    const flagMatches = hasPath === product.hasCustomImage;
+
+    if (flagMatches) {
+      toast.info(`Cover flag already in sync for ${product.title}`, {
+        description: "No repair needed.",
+      });
+      return;
+    }
+
+    const correctedFlag = hasPath;
+    setSaveStatus("saving");
+    const toastId = toast.loading(`Syncing cover flag for ${product.title}…`, {
+      description: `Setting hasCustomImage → ${correctedFlag}`,
+    });
+
+    try {
+      const updatedProduct: Product = {
+        ...product,
+        hasCustomImage: correctedFlag,
+      };
+      await updateProductByKey.mutateAsync({
+        textKey: product.id,
+        product: updatedProduct,
+      });
+
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
+
+      setSaveStatus("saved");
+      setLastSaveTime(new Date());
+      toast.success(`Cover flag synced for ${product.title}`, {
+        id: toastId,
+        description: `hasCustomImage is now ${correctedFlag}.`,
+      });
+
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    } catch (error) {
+      console.error("Failed to sync cover flag:", error);
+      setSaveStatus("error");
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to sync cover flag";
+      setValidationErrors([errorMessage]);
+      toast.error(`Failed to sync cover flag for ${product.title}`, {
+        id: toastId,
+        description: errorMessage,
+      });
 
       setTimeout(() => setSaveStatus("idle"), 5000);
     }
@@ -329,6 +387,7 @@ export default function AdminProductsManager() {
               }
               onCoverUpload={(file) => handleCoverUpload(product, file)}
               onDeleteCover={() => handleDeleteCover(product)}
+              onSyncCoverFlag={() => handleSyncCoverFlag(product)}
             />
           ))}
         </div>
@@ -346,6 +405,7 @@ function ProductCard({
   uploadProgress,
   onCoverUpload,
   onDeleteCover,
+  onSyncCoverFlag,
 }: {
   product: Product;
   index: number;
@@ -353,8 +413,16 @@ function ProductCard({
   uploadProgress: number;
   onCoverUpload: (file: File) => void;
   onDeleteCover: () => void;
+  onSyncCoverFlag: () => void;
 }) {
   const coverInputRef = useRef<HTMLInputElement>(null);
+
+  // The hasCustomImage flag is "stale" when it disagrees with whether a
+  // frontCoverImagePath is set. The Sync button is only enabled when a repair
+  // is actually needed; when the flag is already consistent it is disabled
+  // and labelled to communicate that no action is required.
+  const hasPath = Boolean(product.frontCoverImagePath);
+  const flagStale = hasPath !== product.hasCustomImage;
 
   return (
     <div
@@ -395,6 +463,42 @@ function ProductCard({
             className="bg-black text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isUploading ? "Uploading…" : "Upload Cover"}
+          </button>
+        </div>
+
+        {/* Cover flag status + Sync cover flag action */}
+        <div className="flex items-center justify-between gap-3 mb-3 p-3 rounded-lg bg-gray-50 border border-gray-100">
+          <div className="min-w-0">
+            <p className="text-xs font-medium text-gray-700">
+              Cover flag status
+            </p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              {flagStale ? (
+                <span className="text-amber-700 font-medium">
+                  Stale — hasCustomImage is {String(product.hasCustomImage)} but
+                  cover path {hasPath ? "is set" : "is missing"}
+                </span>
+              ) : (
+                <span className="text-green-700">
+                  In sync — hasCustomImage is {String(product.hasCustomImage)}
+                </span>
+              )}
+            </p>
+          </div>
+          <button
+            type="button"
+            data-ocid={`product.sync_cover_flag_button.${index + 1}`}
+            onClick={onSyncCoverFlag}
+            disabled={isUploading || !flagStale}
+            className="flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium border transition-colors disabled:opacity-50 disabled:cursor-not-allowed enabled:border-amber-300 enabled:text-amber-800 enabled:bg-amber-50 enabled:hover:bg-amber-100 border-gray-200 text-gray-500"
+            title={
+              flagStale
+                ? "Repair the hasCustomImage flag to match the cover path state"
+                : "Cover flag is already in sync"
+            }
+            aria-label={`Sync cover flag for ${product.title}`}
+          >
+            Sync cover flag
           </button>
         </div>
 

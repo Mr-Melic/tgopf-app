@@ -1003,15 +1003,17 @@ export default function HomePage({
   ]);
 
   const firstProduct = featuredData?.firstProduct;
-  const useFirstPlaceholder = featuredData?.useFirstPlaceholder ?? true;
   const secondProduct = featuredData?.secondProduct;
-  const useSecondPlaceholder = featuredData?.useSecondPlaceholder ?? true;
 
   const firstCoverPath = firstProduct?.frontCoverImagePath;
   const secondCoverPath = secondProduct?.frontCoverImagePath;
 
-  const shouldFetchFirstCover = !!firstCoverPath && !useFirstPlaceholder;
-  const shouldFetchSecondCover = !!secondCoverPath && !useSecondPlaceholder;
+  // Gate the cover fetch on whether frontCoverImagePath exists and is non-empty,
+  // NOT on the hasCustomImage boolean. A stale hasCustomImage flag must not
+  // suppress a previously uploaded cover. useFileUrl disables itself when the
+  // path is empty/falsy, so passing the actual path (or "") is sufficient.
+  const shouldFetchFirstCover = !!firstCoverPath;
+  const shouldFetchSecondCover = !!secondCoverPath;
 
   const { data: firstCoverUrl, isLoading: firstCoverLoading } = useFileUrl(
     shouldFetchFirstCover ? firstCoverPath : "",
@@ -1094,19 +1096,28 @@ export default function HomePage({
     staleTime: STALE_5MIN,
   });
 
+  // Return the resolved cover URL when present. FrostedPlaceholder is shown by
+  // the consumer only when frontCoverImagePath is absent/empty (i.e. no path
+  // was ever set), not when hasCustomImage is false. A stale flag must not
+  // hide a previously uploaded cover.
   const getFirstImageSrc = (): string => {
-    if (useFirstPlaceholder || !firstCoverPath) return "";
+    if (!firstCoverPath) return "";
     if (firstCoverUrl) return firstCoverUrl;
     return "";
   };
 
-  const getSecondImageSrc = (): string => secondCoverUrl || "";
+  const getSecondImageSrc = (): string => {
+    if (!secondCoverPath) return "";
+    if (secondCoverUrl) return secondCoverUrl;
+    return "";
+  };
 
   const firstImageSrc = getFirstImageSrc();
   const secondImageSrc = getSecondImageSrc();
   const isFirstImageLoading =
     shouldFetchFirstCover && firstCoverLoading && !firstCoverUrl;
-  const isSecondImageLoading = false;
+  const isSecondImageLoading =
+    shouldFetchSecondCover && secondCoverLoading && !secondCoverUrl;
 
   const handlePolicyClick = (policyType: PolicyType) => {
     if (onNavigateToPolicy) {
