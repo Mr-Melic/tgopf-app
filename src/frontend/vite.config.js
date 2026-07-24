@@ -65,9 +65,9 @@ export default defineConfig({
               url.pathname.includes('/storage'),
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'tgopf-blob-images-v8',
+              cacheName: 'tgopf-blob-images-v9',
               expiration: {
-                maxEntries: 150,
+                maxEntries: 300,
                 maxAgeSeconds: 30 * 24 * 60 * 60,
               },
               cacheableResponse: { statuses: [200] },

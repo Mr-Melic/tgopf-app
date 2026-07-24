@@ -271,6 +271,9 @@ importers:
       vite-plugin-pwa:
         specifier: ^0.21.2
         version: 0.21.2(vite@5.4.21(@types/node@20.19.37)(terser@5.49.0))(workbox-build@7.4.1(@types/babel__core@7.20.5))(workbox-window@7.4.1)
+      workbox-window:
+        specifier: ^7.1.0
+        version: 7.4.1
 
 packages:
 

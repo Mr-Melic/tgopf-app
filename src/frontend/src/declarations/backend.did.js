@@ -670,6 +670,18 @@ export const idlService = IDL.Service({
   'getCryptoSystemEnabled' : IDL.Func([], [IDL.Bool], ['query']),
   'getCurrentReviewNumber' : IDL.Func([], [IDL.Nat], ['query']),
   'getDefaultArtProducts' : IDL.Func([], [IDL.Vec(ArtProduct)], ['query']),
+  'getDefaultImageStatus' : IDL.Func(
+      [],
+      [
+        IDL.Record({
+          'qrCodePath' : IDL.Text,
+          'bolBannerPath' : IDL.Text,
+          'bolBannerRegistered' : IDL.Bool,
+          'qrCodeRegistered' : IDL.Bool,
+        }),
+      ],
+      ['query'],
+    ),
   'getDefaultReviews' : IDL.Func([], [IDL.Vec(Review)], ['query']),
   'getDictionaryEntry' : IDL.Func(
       [IDL.Text],
@@ -1780,6 +1792,18 @@ export const idlFactory = ({ IDL }) => {
     'getCryptoSystemEnabled' : IDL.Func([], [IDL.Bool], ['query']),
     'getCurrentReviewNumber' : IDL.Func([], [IDL.Nat], ['query']),
     'getDefaultArtProducts' : IDL.Func([], [IDL.Vec(ArtProduct)], ['query']),
+    'getDefaultImageStatus' : IDL.Func(
+        [],
+        [
+          IDL.Record({
+            'qrCodePath' : IDL.Text,
+            'bolBannerPath' : IDL.Text,
+            'bolBannerRegistered' : IDL.Bool,
+            'qrCodeRegistered' : IDL.Bool,
+          }),
+        ],
+        ['query'],
+      ),
     'getDefaultReviews' : IDL.Func([], [IDL.Vec(Review)], ['query']),
     'getDictionaryEntry' : IDL.Func(
         [IDL.Text],

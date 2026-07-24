@@ -42,11 +42,27 @@ export function createIdbPersister(): Persister {
 export const idbPersister = createIdbPersister();
 
 /** Check synchronously-ish if there is any cached data available.
- *  Returns a Promise<boolean>. */
+ *  Returns a Promise<boolean>.
+ *
+ *  FIX 2: also verifies the persisted client's buster matches the current
+ *  __BUILD_TIME__. On buster mismatch (e.g. after a new deploy) the app must
+ *  behave as a first visit — loading screen + preloader shown — so we return
+ *  false and let the cache be replaced. The buster value is the same
+ *  __BUILD_TIME__ injected in main.tsx via vite.config.js `define`. */
 export async function hasCachedQueryData(): Promise<boolean> {
   try {
     const cached = await get<PersistedClient>(CACHE_KEY);
     if (!cached) return false;
+
+    // Verify the persisted buster matches the current build. A mismatch means
+    // the cache was written by a previous build and should be treated as empty
+    // so the loading screen + preloader run as on a first visit.
+    const currentBuster =
+      typeof __BUILD_TIME__ !== "undefined"
+        ? __BUILD_TIME__
+        : Date.now().toString();
+    if (cached.buster !== currentBuster) return false;
+
     const queries = cached?.clientState?.queries;
     return Array.isArray(queries) && queries.length > 0;
   } catch {

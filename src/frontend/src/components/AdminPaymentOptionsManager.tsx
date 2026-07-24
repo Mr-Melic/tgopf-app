@@ -1169,34 +1169,45 @@ function BitcoinSettings() {
     address !== "" ? address : (btcConfig?.walletAddress ?? "");
 
   return (
-    <CryptoAddressField
-      label="Bitcoin (BTC)"
-      description="Set the BTC wallet address shown in the Bitcoin payment pop-up and QR code."
-      placeholder="bc1q..."
-      accentColor="#F7931A"
-      currentAddress={currentAddress}
-      onChange={setAddress}
-      onSave={() => {
-        const t = currentAddress.trim();
-        if (!t) {
-          setError("BTC wallet address cannot be empty.");
-          return;
-        }
-        setError(null);
-        saveMutation.mutate(t, {
-          onSuccess: () => {
-            setSaved(true);
-            setTimeout(() => setSaved(false), 3000);
-          },
-          onError: (e) =>
-            setError(e instanceof Error ? e.message : "Save failed."),
-        });
-      }}
-      isPending={saveMutation.isPending}
-      saved={saved}
-      error={error}
-      ocidPrefix="btc-settings"
-    />
+    <>
+      <CryptoAddressField
+        label="Bitcoin (BTC)"
+        description="Set the BTC wallet address shown in the Bitcoin payment pop-up and QR code."
+        placeholder="bc1q..."
+        accentColor="#F7931A"
+        currentAddress={currentAddress}
+        onChange={setAddress}
+        onSave={() => {
+          const t = currentAddress.trim();
+          if (!t) {
+            setError("BTC wallet address cannot be empty.");
+            return;
+          }
+          setError(null);
+          saveMutation.mutate(t, {
+            onSuccess: () => {
+              setSaved(true);
+              setTimeout(() => setSaved(false), 3000);
+            },
+            onError: (e) =>
+              setError(e instanceof Error ? e.message : "Save failed."),
+          });
+        }}
+        isPending={saveMutation.isPending}
+        saved={saved}
+        error={error}
+        ocidPrefix="btc-settings"
+      />
+      <p
+        className="text-[11px] text-gray-400 leading-relaxed mt-1"
+        data-ocid="btc-settings.image_hint"
+      >
+        Note: The Bitcoin QR code uses a default image path (image.png) and the
+        bol banner uses a default path (bol-1.jpg). If these images are not
+        uploaded, a neutral placeholder is shown. Upload replacement images via
+        the file storage tools to customize them.
+      </p>
+    </>
   );
 }
 

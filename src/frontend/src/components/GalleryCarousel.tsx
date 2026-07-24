@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useFileUrl } from "../blob-storage/FileStorage";
+import { useFileUrl, useInvalidateQueries } from "../blob-storage/FileStorage";
+import { useInViewport } from "../hooks/useInViewport";
 
 interface GalleryCarouselPhoto {
   id: string;
@@ -23,7 +24,12 @@ const SLOT_HEIGHT = PHOTO_HEIGHT + GAP_PX; // 237px
 const CONTAINER_HEIGHT =
   PHOTO_HEIGHT * VISIBLE_COUNT + GAP_PX * (VISIBLE_COUNT - 1); // 699px
 
-// Per-photo sub-component so useFileUrl can be called as a hook (not in a loop)
+// Per-photo sub-component so useFileUrl can be called as a hook (not in a loop).
+// FIX 8: useFileUrl is gated behind viewport proximity (IntersectionObserver
+// with 200px rootMargin via useInViewport), matching LazyBlobImage's pattern.
+// Off-screen carousel photos do NOT fire URL resolution during initial load.
+// FIX 5 (carousel): onError hides the broken image and triggers ONE URL
+// re-resolution; if that also fails, a neutral placeholder is shown.
 function CarouselPhotoItem({
   photo,
   isLoaded,
@@ -35,17 +41,77 @@ function CarouselPhotoItem({
   side: string;
   onLoad: () => void;
 }) {
-  const { data: resolvedUrl } = useFileUrl(photo.path);
+  // Gate URL resolution behind viewport proximity — same pattern as
+  // LazyBlobImage. The observer ref attaches to the photo's wrapper div.
+  const [viewportRef, isInViewport] = useInViewport<HTMLDivElement>({
+    enabled: true,
+    rootMargin: "200px",
+  });
+
+  const { data: resolvedUrl } = useFileUrl(isInViewport ? photo.path : "");
   const url = resolvedUrl || "";
 
-  // Don't render at all until the URL is resolved — avoids broken-image icons
-  // and ensures onLoad fires correctly once the real URL arrives
+  // One-shot re-resolution bookkeeping (mirrors LazyBlobImage)
+  const [reResolveAttempted, setReResolveAttempted] = useState(false);
+  const [permanentlyFailed, setPermanentlyFailed] = useState(false);
+  const { invalidateFileUrl } = useInvalidateQueries();
+  const attemptedPathRef = useRef<string | null>(null);
+
+  // Reset error state if the photo path changes
+  useEffect(() => {
+    if (attemptedPathRef.current !== photo.path) {
+      setReResolveAttempted(false);
+      setPermanentlyFailed(false);
+      attemptedPathRef.current = null;
+    }
+  }, [photo.path]);
+
+  // If a (re-)resolution yields no usable URL after an attempt was made,
+  // mark permanently failed so we show the neutral placeholder.
+  useEffect(() => {
+    if (!url && reResolveAttempted) {
+      setPermanentlyFailed(true);
+    } else if (url) {
+      setPermanentlyFailed(false);
+    }
+  }, [url, reResolveAttempted]);
+
+  const handleImageError = () => {
+    if (reResolveAttempted) {
+      // Re-resolution already attempted and also failed — stop looping.
+      setPermanentlyFailed(true);
+      return;
+    }
+    setReResolveAttempted(true);
+    attemptedPathRef.current = photo.path;
+    // Invalidate the fileUrl query for this path so React Query refetches
+    void invalidateFileUrl(photo.path);
+  };
+
+  // Neutral placeholder (no shimmer) shown when the image has permanently
+  // failed OR while the URL has not yet been resolved. The empty opacity:0
+  // div is preserved for the not-yet-resolved case to keep layout stable.
   if (!url) {
     return (
       <div
+        ref={viewportRef}
         className="w-full aspect-[2/3] rounded-lg overflow-hidden shadow-md relative"
         style={{ opacity: 0 }}
       />
+    );
+  }
+
+  if (permanentlyFailed) {
+    return (
+      <div
+        ref={viewportRef}
+        className="w-full aspect-[2/3] rounded-lg overflow-hidden shadow-md relative bg-muted flex items-center justify-center"
+        style={{ opacity: isLoaded ? 1 : 0, transition: "opacity 0.5s ease" }}
+      >
+        <span className="text-muted-foreground text-sm" aria-hidden="true">
+          —
+        </span>
+      </div>
     );
   }
 
@@ -55,6 +121,7 @@ function CarouselPhotoItem({
       alt=""
       className="w-full h-full object-cover"
       onLoad={onLoad}
+      onError={handleImageError}
       onContextMenu={(e) => e.preventDefault()}
       draggable={false}
       style={{ userSelect: "none" }}
@@ -63,6 +130,7 @@ function CarouselPhotoItem({
 
   return (
     <div
+      ref={viewportRef}
       className="w-full aspect-[2/3] rounded-lg overflow-hidden shadow-md relative"
       style={{
         opacity: isLoaded ? 1 : 0,

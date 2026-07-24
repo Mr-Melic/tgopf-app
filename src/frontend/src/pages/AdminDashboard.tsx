@@ -21,6 +21,7 @@ import {
   Star,
   Trophy,
   Users,
+  Wrench,
   Zap,
 } from "lucide-react";
 import type React from "react";
@@ -54,6 +55,7 @@ import AdminRewardsManager from "../components/AdminRewardsManager";
 import AdminRoadmapManager from "../components/AdminRoadmapManager";
 import AdminShortMessagesManager from "../components/AdminShortMessagesManager";
 import AdminSystemControls from "../components/AdminSystemControls";
+import ReprocessImagesTool from "../components/ReprocessImagesTool";
 import AdminGalleryCarousel from "../components/admin/AdminGalleryCarousel";
 import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
@@ -244,7 +246,8 @@ type ModuleId =
   | "amazon-anna-song"
   | "amazon-emilie-nl"
   | "announcements"
-  | "systemControls";
+  | "systemControls"
+  | "reprocessImages";
 
 interface ModuleConfig {
   id: ModuleId;
@@ -588,6 +591,12 @@ export default function AdminDashboard({
           title: "System Controls",
           icon: <Settings className="w-4 h-4" />,
           component: () => <AdminSystemControls />,
+        },
+        {
+          id: "reprocessImages",
+          title: "Reprocess Migrated Images (V417 to WebP)",
+          icon: <Wrench className="w-4 h-4" />,
+          component: () => <ReprocessImagesTool />,
         },
       ],
     },

@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import type { ArtProduct } from "../backend";
 import { useFileList } from "../blob-storage/FileStorage";
+import { buildGatewayBlobUrl } from "../blob-storage/StorageClient";
+import { loadConfig } from "../config";
 import { useActor } from "../hooks/useActor";
 import { useGetFeaturedProducts, useGetReviews } from "../hooks/useQueries";
 import { clearExpiredCache } from "../utils/blobCache";
@@ -108,6 +110,34 @@ export default function HomepageMediaPreloader({
 
     const preloadHomepageMedia = async () => {
       try {
+        // Build a path→hash map from the fileList query cache so we can
+        // construct the same gateway URLs the UI renders, instead of the
+        // legacy /file/{path} URLs. Paths not present in the fileList are
+        // skipped (no fallback to /file/).
+        const pathToHash = new Map<string, string>();
+        for (const file of files || []) {
+          if (file.path && file.hash) {
+            pathToHash.set(file.path, file.hash);
+          }
+        }
+
+        const envConfig = await loadConfig();
+        const { storage_gateway_url, backend_canister_id, project_id } =
+          envConfig;
+
+        // Build a gateway URL for a path using its fileList hash. Returns
+        // null when the path is not in the fileList (skip preloading it).
+        const gatewayUrlForPath = (path: string): string | null => {
+          const hash = pathToHash.get(path);
+          if (!hash) return null;
+          return buildGatewayBlobUrl(
+            storage_gateway_url,
+            hash,
+            backend_canister_id,
+            project_id,
+          );
+        };
+
         const highPriorityUrls: string[] = [];
         const lowPriorityUrls: string[] = [];
 
@@ -125,7 +155,8 @@ export default function HomepageMediaPreloader({
           ) || [];
 
         galleryImages.slice(0, 2).forEach((img) => {
-          highPriorityUrls.push(`${window.location.origin}/file/${img.path}`);
+          const url = gatewayUrlForPath(img.path);
+          if (url) highPriorityUrls.push(url);
         });
 
         // 2. Featured product covers
@@ -133,22 +164,25 @@ export default function HomepageMediaPreloader({
           featuredData?.firstProduct?.frontCoverImagePath &&
           !featuredData.useFirstPlaceholder
         ) {
-          highPriorityUrls.push(
-            `${window.location.origin}/file/${featuredData.firstProduct.frontCoverImagePath}`,
+          const url = gatewayUrlForPath(
+            featuredData.firstProduct.frontCoverImagePath,
           );
+          if (url) highPriorityUrls.push(url);
         }
         if (
           featuredData?.secondProduct?.frontCoverImagePath &&
           !featuredData.useSecondPlaceholder
         ) {
-          highPriorityUrls.push(
-            `${window.location.origin}/file/${featuredData.secondProduct.frontCoverImagePath}`,
+          const url = gatewayUrlForPath(
+            featuredData.secondProduct.frontCoverImagePath,
           );
+          if (url) highPriorityUrls.push(url);
         }
 
         // LOW PRIORITY: warming set
         galleryImages.slice(2, 5).forEach((img) => {
-          lowPriorityUrls.push(`${window.location.origin}/file/${img.path}`);
+          const url = gatewayUrlForPath(img.path);
+          if (url) lowPriorityUrls.push(url);
         });
 
         const cappedLowPriorityUrls = lowPriorityUrls.slice(
@@ -231,8 +265,40 @@ export default function HomepageMediaPreloader({
   useEffect(() => {
     if (!actor || isFetching || !isHighPriorityComplete) return;
 
-    const runBackgroundPreload = () => {
+    const runBackgroundPreload = async () => {
       if (!isMountedRef.current) return;
+
+      // Build a path→hash map from the fileList query cache so we can
+      // construct the same gateway URLs the UI renders, instead of the
+      // legacy /file/{path} URLs. Paths not present in the fileList are
+      // skipped (no fallback to /file/).
+      const pathToHash = new Map<string, string>();
+      for (const file of files || []) {
+        if (file.path && file.hash) {
+          pathToHash.set(file.path, file.hash);
+        }
+      }
+
+      let envConfig;
+      try {
+        envConfig = await loadConfig();
+      } catch (err) {
+        console.warn("HomepageMediaPreloader: loadConfig failed:", err);
+        return;
+      }
+      const { storage_gateway_url, backend_canister_id, project_id } =
+        envConfig;
+
+      const gatewayUrlForPath = (path: string): string | null => {
+        const hash = pathToHash.get(path);
+        if (!hash) return null;
+        return buildGatewayBlobUrl(
+          storage_gateway_url,
+          hash,
+          backend_canister_id,
+          project_id,
+        );
+      };
 
       const backgroundUrls: string[] = [];
 
@@ -247,14 +313,14 @@ export default function HomepageMediaPreloader({
         ) || [];
 
       galleryImages.slice(2).forEach((img) => {
-        backgroundUrls.push(`${window.location.origin}/file/${img.path}`);
+        const url = gatewayUrlForPath(img.path);
+        if (url) backgroundUrls.push(url);
       });
 
       artProducts?.forEach((product) => {
         if (product.imagePath) {
-          backgroundUrls.push(
-            `${window.location.origin}/file/${product.imagePath}`,
-          );
+          const url = gatewayUrlForPath(product.imagePath);
+          if (url) backgroundUrls.push(url);
         }
       });
 

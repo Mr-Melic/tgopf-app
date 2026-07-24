@@ -76,8 +76,11 @@ export default function AdminProductsManager() {
 
     try {
       setUploadingProductId(product.id);
-      const extension = file.name.split(".").pop() || "webp";
-      const coverPath = `covers/${product.id}_front.${extension}`;
+      // convertToWebP (called at the input onChange before onCoverUpload)
+      // always converts the file to WebP, so the stored path must use .webp
+      // regardless of the original filename's extension. This applies to new
+      // uploads only — existing stored paths are not renamed or migrated.
+      const coverPath = `covers/${product.id}_front.webp`;
 
       await uploadFile(coverPath, file, (progress) => {
         setUploadProgress(progress);

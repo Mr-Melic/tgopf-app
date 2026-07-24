@@ -1,10 +1,10 @@
 import { HttpAgent } from "@icp-sdk/core/agent";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { FileReference } from "../backend";
+import type { FileReference } from "../backend";
 import { loadConfig } from "../config";
 import { useActor } from "../hooks/useActor";
-import { StorageClient } from "./StorageClient";
+import { StorageClient, buildGatewayBlobUrl } from "./StorageClient";
 
 const getHttpAgent = async () => {
   const config = await loadConfig();
@@ -48,10 +48,22 @@ export const useFileList = () => {
   });
 };
 
-// Unified hook for getting file URLs
+// Unified hook for getting file URLs.
+//
+// Resolves from the cached fileList data first (the complete path→hash list is
+// already fetched in one query by useFileList, queryKey ['fileList']). Only when
+// the requested path is absent from the cached list does it fall back to a
+// per-path actor.getFileReference(path) call via StorageClient.getDirectURL.
+//
+// Throws when the resolved URL is empty or missing so React Query treats it as
+// an error and retries (retry: 2 with exponential backoff, fileUrl queries only).
 export const useFileUrl = (path: string) => {
   const { actor } = useActor();
+  const queryClient = useQueryClient();
 
+  // Fallback path: resolve a single file reference via the backend actor using
+  // the existing StorageClient.getDirectURL behavior. Used ONLY when the path is
+  // absent from the cached fileList.
   const getFileReference = async (filePath: string): Promise<string> => {
     if (!actor) return "";
 
@@ -93,16 +105,51 @@ export const useFileUrl = (path: string) => {
   return useQuery({
     queryKey: ["fileUrl", path],
     queryFn: async () => {
-      try {
-        return await getFileReference(path!);
-      } catch (err) {
-        console.warn("FileStorage: could not resolve URL for path:", path, err);
-        return null;
+      const filePath = path!;
+
+      // (1) Read the cached fileList data and look for a matching path.
+      const fileList = queryClient.getQueryData<FileReference[]>(["fileList"]);
+      const match = fileList?.find((ref) => ref.path === filePath);
+
+      if (match?.hash) {
+        // (3) Construct the gateway URL locally using the SAME format
+        // StorageClient.getDirectURL builds, reading the envConfig values from
+        // the same source StorageClient uses.
+        const envConfig = await loadConfig();
+        const url = buildGatewayBlobUrl(
+          envConfig.storage_gateway_url,
+          match.hash,
+          envConfig.backend_canister_id,
+          envConfig.project_id,
+        );
+        // (FIX 5) Throw on empty/missing so React Query retries.
+        if (!url) {
+          throw new Error(
+            `FileStorage: resolved empty URL for path '${filePath}' from fileList`,
+          );
+        }
+        return url;
       }
+
+      // (4) Fallback: path absent from fileList — resolve per-path via the
+      // existing StorageClient.getDirectURL path.
+      const fallbackUrl = await getFileReference(filePath);
+      // (FIX 5) Throw when the fallback also returns empty/null so React Query
+      // treats it as an error and retries.
+      if (!fallbackUrl) {
+        throw new Error(
+          `FileStorage: could not resolve URL for path '${filePath}' (not in fileList and fallback returned empty)`,
+        );
+      }
+      return fallbackUrl;
     },
     enabled: !!path,
     staleTime: 5 * 60 * 1000, // 30 minutes (was POSITIVE_INFINITY but let's refresh stale content)
     gcTime: 60 * 60 * 1000, // 1 hour (extended from 30 min)
+    // (FIX 5) Per-query retry override: 2 retries with exponential backoff.
+    // Does not change the global retry setting.
+    retry: 2,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 };
 

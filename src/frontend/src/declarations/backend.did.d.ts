@@ -580,6 +580,15 @@ export interface _SERVICE {
   'getCryptoSystemEnabled' : ActorMethod<[], boolean>,
   'getCurrentReviewNumber' : ActorMethod<[], bigint>,
   'getDefaultArtProducts' : ActorMethod<[], Array<ArtProduct>>,
+  'getDefaultImageStatus' : ActorMethod<
+    [],
+    {
+      'qrCodePath' : string,
+      'bolBannerPath' : string,
+      'bolBannerRegistered' : boolean,
+      'qrCodeRegistered' : boolean,
+    }
+  >,
   'getDefaultReviews' : ActorMethod<[], Array<Review>>,
   'getDictionaryEntry' : ActorMethod<[string], [] | [DictionaryEntry]>,
   'getDisclaimerText' : ActorMethod<[], string>,

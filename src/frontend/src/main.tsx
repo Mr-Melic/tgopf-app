@@ -1,3 +1,4 @@
+import { registerSW } from "virtual:pwa-register";
 import { InternetIdentityProvider } from "@caffeineai/core-infrastructure";
 import { QueryClient } from "@tanstack/react-query";
 import ReactDOM from "react-dom/client";
@@ -5,6 +6,10 @@ import App from "./App";
 import "./index.css";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { idbPersister } from "./utils/queryPersister";
+
+// Register the service worker via the virtual:pwa-register module.
+// vite.config.js keeps injectRegister:false, so we register explicitly here.
+registerSW({ immediate: true });
 
 BigInt.prototype.toJSON = function () {
   return this.toString();
@@ -44,7 +49,20 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           ? __BUILD_TIME__
           : Date.now().toString(),
       dehydrateOptions: {
-        shouldDehydrateQuery: (query) => query.state.status === "success",
+        shouldDehydrateQuery: (query) => {
+          if (query.state.status !== "success") return false;
+          // FIX 5: do not persist fileUrl queries whose data is empty
+          // (failed lookups cached as success with empty data). This prevents
+          // stale empty results from being written to IndexedDB.
+          const firstKey = query.queryKey[0];
+          if (firstKey === "fileUrl") {
+            const data = query.state.data;
+            if (data === "" || data === null || data === undefined) {
+              return false;
+            }
+          }
+          return true;
+        },
       },
     }}
   >

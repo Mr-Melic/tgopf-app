@@ -18,7 +18,7 @@ import PaymentOptionsAPI "mixins/payment-options-api";
 import DonationTypes "types/donations";
 import DonationsAPI "mixins/donations-api";
 import EmojiInflation "lib/EmojiInflation";
-import Migration "migration";
+
 
 
 
@@ -87,7 +87,7 @@ import OqlValueId "lib/OqlValueId";
 
 
 
-(with migration = Migration.run) actor {
+ actor {
     // ─── Migration: registry -> blobRegistry rename ────────────────────────────
     // The previous deployed version had a stable `registry` (blob-storage).
     // It was renamed to `blobRegistry` to avoid colliding with the OQL Expose
@@ -906,6 +906,28 @@ import OqlValueId "lib/OqlValueId";
             Runtime.trap("Unauthorized: Only admins can drop file references");
         };
         Registry.remove(blobRegistry, path);
+    };
+
+    // Reports whether the backend's default image paths ("image.png" for the
+    // Bitcoin QR code and "bol-1.jpg" for the bol banner) have a registered
+    // file reference in the blob registry. Lets the frontend render a graceful
+    // neutral placeholder instead of a perpetual loader when a default image
+    // has not been uploaded by an admin. Purely additive — does not change any
+    // existing getter return values or stored data.
+    public query func getDefaultImageStatus() : async {
+        qrCodePath : Text;
+        qrCodeRegistered : Bool;
+        bolBannerPath : Text;
+        bolBannerRegistered : Bool;
+    } {
+        let qrCodePath = "image.png";
+        let bolBannerPath = "bol-1.jpg";
+        {
+            qrCodePath;
+            qrCodeRegistered = Registry.tryGet(blobRegistry, qrCodePath) != null;
+            bolBannerPath;
+            bolBannerRegistered = Registry.tryGet(blobRegistry, bolBannerPath) != null;
+        };
     };
 
     public shared ({ caller }) func updatePolicyContent(policyType : PolicyType, content : Text) : async () {

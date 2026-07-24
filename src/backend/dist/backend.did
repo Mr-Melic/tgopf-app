@@ -646,6 +646,13 @@ service : {
   getCryptoSystemEnabled: () -> (bool) query;
   getCurrentReviewNumber: () -> (nat) query;
   getDefaultArtProducts: () -> (vec ArtProduct) query;
+  getDefaultImageStatus: () ->
+   (record {
+      bolBannerPath: text;
+      bolBannerRegistered: bool;
+      qrCodePath: text;
+      qrCodeRegistered: bool;
+    }) query;
   getDefaultReviews: () -> (vec Review) query;
   getDictionaryEntry: (word: text) -> (opt DictionaryEntry) query;
   getDisclaimerText: () -> (text) query;

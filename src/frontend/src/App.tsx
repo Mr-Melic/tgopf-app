@@ -270,9 +270,11 @@ function App() {
     return () => clearTimeout(timer);
   }, [showFooter]);
 
-  // All three gates must pass before dismissing
-  const shouldDismissLoadingScreen =
-    !isInitializing && isPreloadComplete && isDataReady;
+  // Actor must be initialised AND critical data queries must have settled.
+  // isPreloadComplete is intentionally NOT gated here — images stream in
+  // behind their existing placeholders while the preloader warms them in
+  // the background as non-blocking work.
+  const shouldDismissLoadingScreen = !isInitializing && isDataReady;
 
   // Return visitor with cached data — skip full loading sequence
   useEffect(() => {

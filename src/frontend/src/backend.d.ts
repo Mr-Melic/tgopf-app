@@ -595,6 +595,12 @@ export interface backendInterface {
     getCryptoSystemEnabled(): Promise<boolean>;
     getCurrentReviewNumber(): Promise<bigint>;
     getDefaultArtProducts(): Promise<Array<ArtProduct>>;
+    getDefaultImageStatus(): Promise<{
+        qrCodePath: string;
+        bolBannerPath: string;
+        bolBannerRegistered: boolean;
+        qrCodeRegistered: boolean;
+    }>;
     getDefaultReviews(): Promise<Array<Review>>;
     getDictionaryEntry(word: string): Promise<DictionaryEntry | null>;
     getDisclaimerText(): Promise<string>;

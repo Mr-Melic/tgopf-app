@@ -657,6 +657,12 @@ export interface backendInterface {
     getCryptoSystemEnabled(): Promise<boolean>;
     getCurrentReviewNumber(): Promise<bigint>;
     getDefaultArtProducts(): Promise<Array<ArtProduct>>;
+    getDefaultImageStatus(): Promise<{
+        qrCodePath: string;
+        bolBannerPath: string;
+        bolBannerRegistered: boolean;
+        qrCodeRegistered: boolean;
+    }>;
     getDefaultReviews(): Promise<Array<Review>>;
     getDictionaryEntry(word: string): Promise<DictionaryEntry | null>;
     getDisclaimerText(): Promise<string>;
@@ -2504,6 +2510,25 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.getDefaultArtProducts();
             return from_candid_vec_n57(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getDefaultImageStatus(): Promise<{
+        qrCodePath: string;
+        bolBannerPath: string;
+        bolBannerRegistered: boolean;
+        qrCodeRegistered: boolean;
+    }> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getDefaultImageStatus();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getDefaultImageStatus();
+            return result;
         }
     }
     async getDefaultReviews(): Promise<Array<Review>> {

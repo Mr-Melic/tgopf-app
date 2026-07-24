@@ -11,6 +11,21 @@ const MAX_DELAY_MS = 30000;
 
 const GATEWAY_VERSION = "v1";
 
+/**
+ * Build a storage gateway blob URL from a known hash without an actor call.
+ * This mirrors the URL format produced by {@link StorageClient.getDirectURL}
+ * so callers that already have a hash (e.g. from the cached fileList) can
+ * resolve a URL locally instead of round-tripping to the backend.
+ */
+export function buildGatewayBlobUrl(
+  storageGatewayUrl: string,
+  hash: string,
+  backendCanisterId: string,
+  projectId: string,
+): string {
+  return `${storageGatewayUrl}/${GATEWAY_VERSION}/blob/?blob_hash=${encodeURIComponent(hash)}&owner_id=${encodeURIComponent(backendCanisterId)}&project_id=${encodeURIComponent(projectId)}`;
+}
+
 const HASH_ALGORITHM = "SHA-256";
 const SHA256_PREFIX = "sha256:";
 const DOMAIN_SEPARATOR_FOR_CHUNKS = new TextEncoder().encode("icfs-chunk/");
@@ -616,7 +631,12 @@ export class StorageClient {
       return "";
     }
 
-    return `${this.storageGatewayClient.getStorageGatewayUrl()}/${GATEWAY_VERSION}/blob/?blob_hash=${encodeURIComponent(fileReference.hash)}&owner_id=${encodeURIComponent(this.backendCanisterId)}&project_id=${encodeURIComponent(this.projectId)}`;
+    return buildGatewayBlobUrl(
+      this.storageGatewayClient.getStorageGatewayUrl(),
+      fileReference.hash,
+      this.backendCanisterId,
+      this.projectId,
+    );
   }
 
   private async processFileForUpload(
