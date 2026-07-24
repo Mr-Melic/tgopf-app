@@ -1,0 +1,917 @@
+// Version: 3.0.0
+type AmazonRegion__959413322 =
+  {
+    country : Text;
+    currencySymbol : Text;
+    domain : Text;
+    enabled : Bool;
+    hardcoverButtonColor : Text;
+    hardcoverButtonText : Text;
+    hardcoverFontColor : Text;
+    hardcoverLink : Text;
+    hardcoverPrice : Text;
+    id : Text;
+    kindleButtonColor : Text;
+    kindleButtonText : Text;
+    kindleFontColor : Text;
+    kindleLink : Text;
+    kindlePrice : Text;
+    paperbackButtonColor : Text;
+    paperbackButtonText : Text;
+    paperbackFontColor : Text;
+    paperbackLink : Text;
+    paperbackPrice : Text;
+    showKindleUnlimited : Bool
+  };
+type AmazonRegion__973240506 =
+  {
+    country : Text;
+    currencySymbol : Text;
+    domain : Text;
+    enabled : Bool;
+    hardcoverButtonColor : Text;
+    hardcoverButtonText : Text;
+    hardcoverFontColor : Text;
+    hardcoverLink : Text;
+    hardcoverPrice : Text;
+    id : Text;
+    kindleButtonColor : Text;
+    kindleButtonText : Text;
+    kindleFontColor : Text;
+    kindleLink : Text;
+    kindlePrice : Text;
+    paperbackButtonColor : Text;
+    paperbackButtonText : Text;
+    paperbackFontColor : Text;
+    paperbackLink : Text;
+    paperbackPrice : Text;
+    showKindleUnlimited : Bool
+  };
+type Announcement__160704614 =
+  {createdAt : Int; id : Nat; message : Text; title : Text; url : ?Text};
+type Announcement__689515546 =
+  {createdAt : Int; id : Nat; message : Text; title : Text; url : ?Text};
+type ArtProduct__143631351 =
+  {id : Text; imagePath : ?Text; purchaseLink : Text; title : Text};
+type ArtProduct__791828812 =
+  {id : Text; imagePath : ?Text; purchaseLink : Text; title : Text};
+type AuthorNoteReaction__769110720 = {#dislike; #laugh; #like; #love};
+type AuthorNote__354878955 =
+  {
+    id : Text;
+    noteText : Text;
+    poemSubtitle : Text;
+    poemTitle : Text;
+    reactions : {dislike : Nat; laugh : Nat; like : Nat; love : Nat}
+  };
+type AuthorNote__931966700 =
+  {
+    id : Text;
+    noteText : Text;
+    poemSubtitle : Text;
+    poemTitle : Text;
+    reactions : {dislike : Nat; laugh : Nat; like : Nat; love : Nat}
+  };
+type BackgroundMusicTrack__190863955 =
+  {
+    artist : Text;
+    isActive : Bool;
+    path : Text;
+    title : Text;
+    uploadTimestamp : Int
+  };
+type BackgroundMusicTrack__409587620 =
+  {
+    artist : Text;
+    isActive : Bool;
+    path : Text;
+    title : Text;
+    uploadTimestamp : Int
+  };
+type BilingualHomepageTextBlocks__667161996 =
+  {en : HomepageTextBlocks__326399939; nl : HomepageTextBlocks__326399939};
+type BookSale__274033711 =
+  {bookNumber : Nat; customerName : ?Text; salesAmount : Nat};
+type BookSale__309249286 =
+  {bookNumber : Nat; customerName : ?Text; salesAmount : Nat};
+type ChallengeCategory__618799064 = {#retail; #social};
+type Data__552063367<K, V> = {var count : Nat__93962160; kvs : [var ?(K, V)]};
+type DictionaryEntry__501130283 =
+  {etymology : Text; examples : Text; meaning : Text; word : Text};
+type DictionaryEntry__517992219 =
+  {etymology : Text; examples : Text; meaning : Text; word : Text};
+type DonationEntry__301450128 =
+  {address : Text; column : Nat; id : Text; name : Text; position : Nat};
+type DonationEntry__515237071 =
+  {address : Text; column : Nat; id : Text; name : Text; position : Nat};
+type ExperienceChallenge__1020888421 =
+  {
+    category : ChallengeCategory__618799064;
+    description : Text;
+    id : Text;
+    rewardPoints : Nat;
+    specialReward : ?Text;
+    title : Text
+  };
+type ExperienceChallenge__909383198 =
+  {
+    category : {#retail; #social};
+    description : Text;
+    id : Text;
+    rewardPoints : Nat;
+    specialReward : ?Text;
+    title : Text
+  };
+type FileReference__486842902 = {hash : Text; path : Text};
+type FileReference__615446570 = {hash : Text; path : Text};
+type GalleryCarouselPhoto__1016120008 =
+  {id : Text; linkUrl : Text; path : Text; side : Text; sortOrder : Nat};
+type GalleryCarouselPhoto__317667863 =
+  {id : Text; linkUrl : Text; path : Text; side : Text; sortOrder : Nat};
+type GameComment__593635877 =
+  {
+    authorName : Text;
+    authorPrincipal : Text;
+    commentText : Text;
+    createdAt : Int;
+    gameId : Text;
+    id : Text
+  };
+type GameComment__811561342 =
+  {
+    authorName : Text;
+    authorPrincipal : Text;
+    commentText : Text;
+    createdAt : Int;
+    gameId : Text;
+    id : Text
+  };
+type GameReaction__66007328 = {#dislike; #laugh; #like; #love};
+type Game__396010996 =
+  {
+    createdAt : Int;
+    gameType : Text;
+    id : Text;
+    imageUrl : ?Text;
+    materialsRequired : Text;
+    playerCount : Text;
+    rules : [Text];
+    title : Text
+  };
+type Game__939537640 =
+  {
+    createdAt : Int;
+    gameType : Text;
+    id : Text;
+    imageUrl : ?Text;
+    materialsRequired : Text;
+    playerCount : Text;
+    rules : [Text];
+    title : Text
+  };
+type HomepageTextBlocks__326399939 =
+  {
+    block1 : TextBlock__53624879;
+    block2 : TextBlock__53624879;
+    block3 : TextBlock__53624879
+  };
+type InflationHistoryEntry__158812098 =
+  {
+    appliedAt : Int;
+    newPrice : Float;
+    oldPrice : Float;
+    ratePercent : Float;
+    year : Int
+  };
+type InflationHistoryEntry__971094258 =
+  {
+    appliedAt : Int;
+    newPrice : Float;
+    oldPrice : Float;
+    ratePercent : Float;
+    year : Int
+  };
+type Internal__455405067<K, V> =
+  {children : [var ?Node__279997185<K, V>]; data : Data__552063367<K, V>};
+type LeaderboardEntry__111394351 =
+  {id : Text; name : Text; photoPath : ?Text; score : Nat};
+type LeaderboardEntry__252692527 =
+  {id : Text; name : Text; photoPath : ?Text; score : Nat};
+type Leaf__114713147<K, V> = {data : Data__552063367<K, V>};
+type Map__190625089<K, V> = Map__719753394<K, V>;
+type Map__246123559<K, V> = Map__190625089<K, V>;
+type Map__719753394<K, V> =
+  {var root : Node__279997185<K, V>; var size : Nat__93962160};
+type Nat__920180692 = Nat;
+type Nat__93962160 = Nat__920180692;
+type NewsletterSubscriber__461930087 =
+  {email : Text; principalId : Text; subscribedAt : Int};
+type NewsletterSubscriber__742227594 =
+  {email : Text; principalId : Text; subscribedAt : Int};
+type Node__279997185<K, V> =
+  {#internal : Internal__455405067<K, V>; #leaf : Leaf__114713147<K, V>};
+type OldReview__1036017002 =
+  {
+    bookTitle : Text;
+    companyBlogSite : ?Text;
+    fullText : Text;
+    id : Text;
+    pageNumbers : Text;
+    photoPath : ?Text;
+    poemSubTitle : Text;
+    poemTitle : Text;
+    reactions : ?{dislike : Nat; laugh : Nat; like : Nat; love : Nat};
+    reviewerName : Text;
+    snippet : Text;
+    sourceLink : ?Text;
+    starRating : ?Nat;
+    videoUrl : ?Text
+  };
+type PaymentCountry__310402549 =
+  {continent : Text; enabled : Bool; id : Text; name : Text; sortOrder : Nat};
+type PaymentCountry__675439873 =
+  {continent : Text; enabled : Bool; id : Text; name : Text; sortOrder : Nat};
+type PaymentOption__338034719 =
+  {
+    buttonColor : Text;
+    buzzingEnabled : Bool;
+    countryId : Text;
+    enabled : Bool;
+    fontColor : Text;
+    id : Text;
+    link : Text;
+    logoStorageKey : Text;
+    logoUrl : Text;
+    methodName : Text;
+    priceEuro : Text;
+    shippingEuro : Text;
+    sortOrder : Nat
+  };
+type PaymentOption__408993243 =
+  {
+    buttonColor : Text;
+    buzzingEnabled : Bool;
+    countryId : Text;
+    enabled : Bool;
+    fontColor : Text;
+    id : Text;
+    link : Text;
+    logoStorageKey : Text;
+    logoUrl : Text;
+    methodName : Text;
+    priceEuro : Text;
+    shippingEuro : Text;
+    sortOrder : Nat
+  };
+type PolicyContent__942246228 =
+  {content : Text; policyType : PolicyType__993186151; title : Text};
+type PolicyContent__985063924 =
+  {content : Text; policyType : PolicyType__46331978; title : Text};
+type PolicyType__46331978 =
+  {
+    #cookiePolicy;
+    #disclaimerLiability;
+    #intellectualProperty;
+    #privacyPolicy;
+    #promotionalTerms;
+    #refundAndReturn;
+    #shippingAndDelivery;
+    #termsAndConditions
+  };
+type PolicyType__993186151 =
+  {
+    #cookiePolicy;
+    #disclaimerLiability;
+    #intellectualProperty;
+    #privacyPolicy;
+    #promotionalTerms;
+    #refundAndReturn;
+    #shippingAndDelivery;
+    #termsAndConditions
+  };
+type Product__1065022864 = Product__778081973;
+type Product__778081973 =
+  {
+    description : Text;
+    editionType : Text;
+    frontCoverImagePath : ?Text;
+    hasCustomImage : Bool;
+    id : Text;
+    images : [Text];
+    price : Nat;
+    title : Text
+  };
+type QuarterKey__399345386 = {quarter : Quarter__787310651; year : Nat};
+type QuarterKey__889665593 = {quarter : {#q1; #q2; #q3; #q4}; year : Nat};
+type Quarter__787310651 = {#q1; #q2; #q3; #q4};
+type ReflectionBlockReaction__589142523 = {#dislike; #laugh; #like; #love};
+type ReflectionBlock__1013223968 =
+  {
+    id : Text;
+    poemTitle : Text;
+    reactions : ?{dislike : Nat; laugh : Nat; like : Nat; love : Nat};
+    reflectionChallenges : [Text]
+  };
+type ReflectionBlock__220086228 =
+  {
+    id : Text;
+    poemTitle : Text;
+    reactions : ?{dislike : Nat; laugh : Nat; like : Nat; love : Nat};
+    reflectionChallenges : [Text]
+  };
+type ReviewMilestone__482957124 = {milestone : Nat; prizeImagePath : ?Text};
+type ReviewMilestone__696579820 = {milestone : Nat; prizeImagePath : ?Text};
+type ReviewReaction__136504603 = {#dislike; #laugh; #like; #love};
+type Review__422344017 =
+  {
+    bookTitle : Text;
+    companyBlogSite : ?Text;
+    fullText : Text;
+    id : Text;
+    pageNumbers : Text;
+    photoPath : ?Text;
+    poemSubTitle : Text;
+    poemTitle : Text;
+    reactions : ?{dislike : Nat; laugh : Nat; like : Nat; love : Nat};
+    reviewerName : Text;
+    snippet : Text;
+    sourceLink : ?Text;
+    starRating : ?Nat;
+    videoUrl : ?Text
+  };
+type Reward__399531263 =
+  {
+    amount : Nat;
+    description : Text;
+    id : Text;
+    pageType : {#retail; #social};
+    photoPath : ?Text;
+    rewardType : {#other; #points; #referral}
+  };
+type Reward__438895196 =
+  {
+    amount : Nat;
+    description : Text;
+    id : Text;
+    pageType : {#retail; #social};
+    photoPath : ?Text;
+    rewardType : {#other; #points; #referral}
+  };
+type SharedPaymentLogo__867216442 =
+  {id : Text; logoStorageKey : Text; logoUrl : Text; name : Text};
+type SharedPaymentLogo__977479731 =
+  {id : Text; logoStorageKey : Text; logoUrl : Text; name : Text};
+type ShortMessage__167215813 = {createdAt : Int; id : Text; text : Text};
+type ShortMessage__519532370 = {createdAt : Int; id : Text; text : Text};
+type TaxRecord__382183396 =
+  {
+    quarter : {#q1; #q2; #q3; #q4};
+    salesAmount : Nat;
+    taxAmount : Nat;
+    year : Nat
+  };
+type TaxRecord__789542463 =
+  {
+    quarter : Quarter__787310651;
+    salesAmount : Nat;
+    taxAmount : Nat;
+    year : Nat
+  };
+type TextBlock__44654448 = {content : Text; title : Text};
+type TextBlock__53624879 = {content : Text; title : Text};
+type TextBlock__684687936 = {content : Text; title : Text};
+type UserProfile__315128327 =
+  {
+    favouriteAuthorNotes : [Text];
+    favouriteGames : [Text];
+    favouriteReflections : [Text];
+    favouriteShortMessages : [Text];
+    favouriteVocabulary : [Text];
+    name : Text
+  };
+type UserProfile__491224006 =
+  {
+    favouriteAuthorNotes : [Text];
+    favouriteGames : [Text];
+    favouriteReflections : [Text];
+    favouriteShortMessages : [Text];
+    favouriteVocabulary : [Text];
+    name : Text
+  };
+type UserRole__521596351 = {#admin; #guest; #user};
+type _AdImageTombstone__697215149 =
+  {fileKey : Text; id : Nat; sectionId : Text; sortOrder : Nat};
+type _ModelPhotoPanelTombstone__442901408 = {images : [Text]; panelId : Nat};
+actor ({
+  in _btcCacheTtlNs : Int;
+  in _btcFallbackRate : Float;
+  in _cryptoCacheTtlNs : Int;
+  in var _dailyCheckNs : Int;
+  in _ethFallbackRate : Float;
+  in _icpFallbackRate : Float;
+  in _unifiedCryptoCache :
+    {
+      var btcRate : Float;
+      var ethRate : Float;
+      var fetchedAt : Int;
+      var icpRate : Float
+    };
+  in accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__246123559<Principal, {#admin; #guest; #user}>
+    };
+  in var activeBackgroundMusicTrack : ?Text;
+  in var adImages :
+    [{fileKey : Text; id : Nat; sectionId : Text; sortOrder : Nat}];
+  in amazonRegions : Map__246123559<Text, AmazonRegion__973240506>;
+  in amazonRegionsAnna : Map__246123559<Text, AmazonRegion__973240506>;
+  stable amazonRegionsAnnaSong :
+    {
+      var root : Node__279997185<Text, AmazonRegion__959413322>;
+      var size : Nat__93962160
+    };
+  in amazonRegionsEmilie : Map__246123559<Text, AmazonRegion__973240506>;
+  stable amazonRegionsEmilieNl :
+    {
+      var root : Node__279997185<Text, AmazonRegion__959413322>;
+      var size : Nat__93962160
+    };
+  in amazonRegionsTopf : Map__246123559<Text, AmazonRegion__973240506>;
+  in annaAmazonState : {var enabled : Bool};
+  stable annaSongAmazonState : {var enabled : Bool};
+  in announcementState : {var nextId : Nat; var rotationInterval : Nat};
+  in announcementsMap : Map__246123559<Nat, Announcement__689515546>;
+  in artProducts : Map__246123559<Text, ArtProduct__791828812>;
+  in authorNoteReactions :
+    Map__246123559<Text,
+                    Map__246123559<Text, {#dislike; #laugh; #like; #love}>>;
+  in authorNotes : Map__246123559<Text, AuthorNote__354878955>;
+  in var backgroundMusicEnabled : Bool;
+  in var backgroundMusicPlaylist : [Text];
+  in var backgroundMusicPlaylistIndex : Nat;
+  in var backgroundMusicSettings :
+    {
+      fadeInDuration : Nat;
+      fadeOutDuration : Nat;
+      shouldLoop : Bool;
+      volume : Nat
+    };
+  in backgroundMusicTracks :
+    Map__246123559<Text, BackgroundMusicTrack__190863955>;
+  in blobRegistry :
+    {
+      var authorizedPrincipals : [Principal];
+      blobsToRemove : Map__246123559<Text, Bool>;
+      references : Map__246123559<Text, FileReference__486842902>
+    };
+  in bookInflation :
+    {
+      basePrice : Float;
+      currentPrice : Float;
+      history : [InflationHistoryEntry__158812098];
+      id : Text;
+      inflationRatePercent : Float;
+      lastAppliedYear : Int
+    };
+  in bookSales : Map__246123559<Nat, BookSale__309249286>;
+  in btcConfig : {var contactEmail : Text; var walletAddress : Text};
+  in btcRateCache : {var fetchedAt : Int; var rate : Float};
+  in var copyrightLegalText : Text;
+  in var copyrightLine : Text;
+  in var copyrightStartYear : Nat;
+  in var copyrightYearColor : Text;
+  in cryptoSystemState : {var enabled : Bool};
+  in var currentReviewNumber : Nat;
+  in dictionaryEntries : Map__246123559<Text, DictionaryEntry__517992219>;
+  in donationsMap : Map__246123559<Text, DonationEntry__301450128>;
+  in emilieAmazonState : {var enabled : Bool};
+  stable emilieNlAmazonState : {var enabled : Bool};
+  in var emojiRatioConfig :
+    {
+      dislikeMax : Nat;
+      dislikeMin : Nat;
+      laughMax : Nat;
+      laughMin : Nat;
+      likeMax : Nat;
+      likeMin : Nat;
+      loveMax : Nat;
+      loveMin : Nat
+    };
+  in emojiSystemState : {var enabled : Bool};
+  in ethConfig : {var walletAddress : Text};
+  in ethRateCache : {var fetchedAt : Int; var rate : Float};
+  in experienceChallenges :
+    Map__246123559<Text, ExperienceChallenge__909383198>;
+  in var experienceHubTexts :
+    {
+      gamesCardDescription : Text;
+      gamesPageSubtitle : Text;
+      mainSubtitle : Text;
+      retailCardDescription : Text;
+      retailPageSubtitle : Text;
+      socialCardDescription : Text;
+      socialPageSubtitle : Text
+    };
+  in var footerSettings :
+    {
+      businessAddress : Text;
+      businessEmail : Text;
+      businessIban : Text;
+      businessKvk : Text;
+      businessName : Text;
+      businessPhone : Text;
+      businessTaxId : Text;
+      footerCaption : Text
+    };
+  in var galleryCarouselPhotosMap :
+    Map__246123559<Text, GalleryCarouselPhoto__317667863>;
+  in gameComments : Map__246123559<Text, GameComment__593635877>;
+  in gameReactions :
+    Map__246123559<Text,
+                    Map__246123559<Text, {#dislike; #laugh; #like; #love}>>;
+  in games : Map__246123559<Text, Game__939537640>;
+  in var homepageTextBlocks :
+    {
+      block1 : TextBlock__44654448;
+      block2 : TextBlock__44654448;
+      block3 : TextBlock__44654448
+    };
+  in homepageTextBlocksAnnaBilingual :
+    {var value : BilingualHomepageTextBlocks__667161996};
+  in homepageTextBlocksEmilieBilingual :
+    {var value : BilingualHomepageTextBlocks__667161996};
+  in icpConfig : {var walletAddress : Text};
+  in icpRateCache : {var fetchedAt : Int; var rate : Float};
+  in var manualDistributionCounts : Map__246123559<Text, Nat>;
+  in var modelPhotoPanels : [{images : [Text]; panelId : Nat}];
+  in newsletterSubscribers :
+    Map__246123559<Text, NewsletterSubscriber__461930087>;
+  in var nextAdImageId : Nat;
+  in paymentCountries : Map__246123559<Text, PaymentCountry__675439873>;
+  in paymentOptions : Map__246123559<Text, PaymentOption__338034719>;
+  in policies :
+    Map__246123559<PolicyType__993186151, PolicyContent__942246228>;
+  in products : Map__246123559<Text, Product__778081973>;
+  in reflectionBlockReactions :
+    Map__246123559<Text,
+                    Map__246123559<Text, {#dislike; #laugh; #like; #love}>>;
+  in reflectionBlocks : Map__246123559<Text, ReflectionBlock__1013223968>;
+  in retailLeaderboard : Map__246123559<Text, LeaderboardEntry__111394351>;
+  in reviewEmojiV2Counts :
+    Map__246123559<Text, {dislike : Nat; laugh : Nat; like : Nat; love : Nat}>;
+  in reviewEmojiV2UserVotes :
+    Map__246123559<Text, Map__246123559<Text, Text>>;
+  in reviewMilestones : Map__246123559<Nat, ReviewMilestone__482957124>;
+  in reviewReactions :
+    Map__246123559<Text,
+                    Map__246123559<Text, {#dislike; #laugh; #like; #love}>>;
+  in reviews : Map__246123559<Text, OldReview__1036017002>;
+  in rewardAvailableCount : Map__246123559<Text, Nat>;
+  in rewardClaimEmail : Map__246123559<Text, Text>;
+  in rewards : Map__246123559<Text, Reward__399531263>;
+  in sharedPaymentLogos : Map__246123559<Text, SharedPaymentLogo__977479731>;
+  in shippingInflation :
+    {
+      basePrice : Float;
+      currentPrice : Float;
+      history : [InflationHistoryEntry__158812098];
+      id : Text;
+      inflationRatePercent : Float;
+      lastAppliedYear : Int
+    };
+  in shortMessages : Map__246123559<Text, ShortMessage__519532370>;
+  in socialLeaderboard : Map__246123559<Text, LeaderboardEntry__111394351>;
+  in var submitProofEmail : Text;
+  in taxRecords : Map__246123559<QuarterKey__889665593, TaxRecord__382183396>;
+  in userProfiles : Map__246123559<Principal, UserProfile__315128327>;
+  in userReactionCounts : Map__246123559<Text, Nat>;
+  in visitorCount : Nat
+}, {
+  stable _btcCacheTtlNs : Int;
+  stable _btcFallbackRate : Float;
+  stable _cryptoCacheTtlNs : Int;
+  stable var _dailyCheckNs : Int;
+  stable _ethFallbackRate : Float;
+  stable _icpFallbackRate : Float;
+  stable _unifiedCryptoCache :
+    {
+      var btcRate : Float;
+      var ethRate : Float;
+      var fetchedAt : Int;
+      var icpRate : Float
+    };
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__246123559<Principal, UserRole__521596351>
+    };
+  stable var activeBackgroundMusicTrack : ?Text;
+  stable var adImages : [_AdImageTombstone__697215149];
+  stable amazonRegions :
+    {
+      var root : Node__279997185<Text, AmazonRegion__959413322>;
+      var size : Nat__93962160
+    };
+  stable amazonRegionsAnna :
+    {
+      var root : Node__279997185<Text, AmazonRegion__959413322>;
+      var size : Nat__93962160
+    };
+  stable amazonRegionsAnnaSong :
+    {
+      var root : Node__279997185<Text, AmazonRegion__959413322>;
+      var size : Nat__93962160
+    };
+  stable amazonRegionsEmilie :
+    {
+      var root : Node__279997185<Text, AmazonRegion__959413322>;
+      var size : Nat__93962160
+    };
+  stable amazonRegionsEmilieNl :
+    {
+      var root : Node__279997185<Text, AmazonRegion__959413322>;
+      var size : Nat__93962160
+    };
+  stable amazonRegionsTopf :
+    {
+      var root : Node__279997185<Text, AmazonRegion__959413322>;
+      var size : Nat__93962160
+    };
+  stable annaAmazonState : {var enabled : Bool};
+  stable annaSongAmazonState : {var enabled : Bool};
+  stable announcementState : {var nextId : Nat; var rotationInterval : Nat};
+  stable announcementsMap :
+    {
+      var root : Node__279997185<Nat, Announcement__160704614>;
+      var size : Nat__93962160
+    };
+  stable artProducts :
+    {
+      var root : Node__279997185<Text, ArtProduct__143631351>;
+      var size : Nat__93962160
+    };
+  stable authorNoteReactions :
+    {
+      var root :
+        Node__279997185<Text,
+                         Map__246123559<Text, AuthorNoteReaction__769110720>>;
+      var size : Nat__93962160
+    };
+  stable authorNotes :
+    {
+      var root : Node__279997185<Text, AuthorNote__931966700>;
+      var size : Nat__93962160
+    };
+  stable var backgroundMusicEnabled : Bool;
+  stable var backgroundMusicPlaylist : [Text];
+  stable var backgroundMusicPlaylistIndex : Nat;
+  stable var backgroundMusicSettings :
+    {
+      fadeInDuration : Nat;
+      fadeOutDuration : Nat;
+      shouldLoop : Bool;
+      volume : Nat
+    };
+  stable backgroundMusicTracks :
+    {
+      var root : Node__279997185<Text, BackgroundMusicTrack__409587620>;
+      var size : Nat__93962160
+    };
+  stable blobRegistry :
+    {
+      var authorizedPrincipals : [Principal];
+      blobsToRemove : Map__246123559<Text, Bool>;
+      references : Map__246123559<Text, FileReference__615446570>
+    };
+  stable bookInflation :
+    {
+      basePrice : Float;
+      currentPrice : Float;
+      history : [InflationHistoryEntry__971094258];
+      id : Text;
+      inflationRatePercent : Float;
+      lastAppliedYear : Int
+    };
+  stable bookSales :
+    {
+      var root : Node__279997185<Nat, BookSale__274033711>;
+      var size : Nat__93962160
+    };
+  stable btcConfig : {var contactEmail : Text; var walletAddress : Text};
+  stable btcRateCache : {var fetchedAt : Int; var rate : Float};
+  stable var copyrightLegalText : Text;
+  stable var copyrightLine : Text;
+  stable var copyrightStartYear : Nat;
+  stable var copyrightYearColor : Text;
+  stable cryptoSystemState : {var enabled : Bool};
+  stable var currentReviewNumber : Nat;
+  stable dictionaryEntries :
+    {
+      var root : Node__279997185<Text, DictionaryEntry__501130283>;
+      var size : Nat__93962160
+    };
+  stable donationsMap :
+    {
+      var root : Node__279997185<Text, DonationEntry__515237071>;
+      var size : Nat__93962160
+    };
+  stable emilieAmazonState : {var enabled : Bool};
+  stable emilieNlAmazonState : {var enabled : Bool};
+  stable var emojiRatioConfig :
+    {
+      dislikeMax : Nat;
+      dislikeMin : Nat;
+      laughMax : Nat;
+      laughMin : Nat;
+      likeMax : Nat;
+      likeMin : Nat;
+      loveMax : Nat;
+      loveMin : Nat
+    };
+  stable emojiSystemState : {var enabled : Bool};
+  stable ethConfig : {var walletAddress : Text};
+  stable ethRateCache : {var fetchedAt : Int; var rate : Float};
+  stable experienceChallenges :
+    {
+      var root : Node__279997185<Text, ExperienceChallenge__1020888421>;
+      var size : Nat__93962160
+    };
+  stable var experienceHubTexts :
+    {
+      gamesCardDescription : Text;
+      gamesPageSubtitle : Text;
+      mainSubtitle : Text;
+      retailCardDescription : Text;
+      retailPageSubtitle : Text;
+      socialCardDescription : Text;
+      socialPageSubtitle : Text
+    };
+  stable var footerSettings :
+    {
+      businessAddress : Text;
+      businessEmail : Text;
+      businessIban : Text;
+      businessKvk : Text;
+      businessName : Text;
+      businessPhone : Text;
+      businessTaxId : Text;
+      footerCaption : Text
+    };
+  stable var galleryCarouselPhotosMap :
+    {
+      var root : Node__279997185<Text, GalleryCarouselPhoto__1016120008>;
+      var size : Nat__93962160
+    };
+  stable gameComments :
+    {
+      var root : Node__279997185<Text, GameComment__811561342>;
+      var size : Nat__93962160
+    };
+  stable gameReactions :
+    {
+      var root :
+        Node__279997185<Text, Map__246123559<Text, GameReaction__66007328>>;
+      var size : Nat__93962160
+    };
+  stable games :
+    {
+      var root : Node__279997185<Text, Game__396010996>;
+      var size : Nat__93962160
+    };
+  stable var homepageTextBlocks :
+    {
+      block1 : TextBlock__684687936;
+      block2 : TextBlock__684687936;
+      block3 : TextBlock__684687936
+    };
+  stable homepageTextBlocksAnnaBilingual :
+    {var value : BilingualHomepageTextBlocks__667161996};
+  stable homepageTextBlocksEmilieBilingual :
+    {var value : BilingualHomepageTextBlocks__667161996};
+  stable icpConfig : {var walletAddress : Text};
+  stable icpRateCache : {var fetchedAt : Int; var rate : Float};
+  stable var manualDistributionCounts :
+    {var root : Node__279997185<Text, Nat>; var size : Nat__93962160};
+  stable var modelPhotoPanels : [_ModelPhotoPanelTombstone__442901408];
+  stable newsletterSubscribers :
+    {
+      var root : Node__279997185<Text, NewsletterSubscriber__742227594>;
+      var size : Nat__93962160
+    };
+  stable var nextAdImageId : Nat;
+  stable paymentCountries :
+    {
+      var root : Node__279997185<Text, PaymentCountry__310402549>;
+      var size : Nat__93962160
+    };
+  stable paymentOptions :
+    {
+      var root : Node__279997185<Text, PaymentOption__408993243>;
+      var size : Nat__93962160
+    };
+  stable policies :
+    {
+      var root :
+        Node__279997185<PolicyType__46331978, PolicyContent__985063924>;
+      var size : Nat__93962160
+    };
+  stable products :
+    {
+      var root : Node__279997185<Text, Product__1065022864>;
+      var size : Nat__93962160
+    };
+  stable reflectionBlockReactions :
+    {
+      var root :
+        Node__279997185<Text,
+                         Map__246123559<Text,
+                                         ReflectionBlockReaction__589142523>>;
+      var size : Nat__93962160
+    };
+  stable reflectionBlocks :
+    {
+      var root : Node__279997185<Text, ReflectionBlock__220086228>;
+      var size : Nat__93962160
+    };
+  stable retailLeaderboard :
+    {
+      var root : Node__279997185<Text, LeaderboardEntry__252692527>;
+      var size : Nat__93962160
+    };
+  stable reviewEmojiV2Counts :
+    {
+      var root :
+        Node__279997185<Text,
+                         {dislike : Nat; laugh : Nat; like : Nat; love : Nat}>;
+      var size : Nat__93962160
+    };
+  stable reviewEmojiV2UserVotes :
+    {
+      var root : Node__279997185<Text, Map__246123559<Text, Text>>;
+      var size : Nat__93962160
+    };
+  stable reviewMilestones :
+    {
+      var root : Node__279997185<Nat, ReviewMilestone__696579820>;
+      var size : Nat__93962160
+    };
+  stable reviewReactions :
+    {
+      var root :
+        Node__279997185<Text, Map__246123559<Text, ReviewReaction__136504603>>;
+      var size : Nat__93962160
+    };
+  stable reviews :
+    {
+      var root : Node__279997185<Text, Review__422344017>;
+      var size : Nat__93962160
+    };
+  stable rewardAvailableCount :
+    {var root : Node__279997185<Text, Nat>; var size : Nat__93962160};
+  stable rewardClaimEmail :
+    {var root : Node__279997185<Text, Text>; var size : Nat__93962160};
+  stable rewards :
+    {
+      var root : Node__279997185<Text, Reward__438895196>;
+      var size : Nat__93962160
+    };
+  stable sharedPaymentLogos :
+    {
+      var root : Node__279997185<Text, SharedPaymentLogo__867216442>;
+      var size : Nat__93962160
+    };
+  stable shippingInflation :
+    {
+      basePrice : Float;
+      currentPrice : Float;
+      history : [InflationHistoryEntry__971094258];
+      id : Text;
+      inflationRatePercent : Float;
+      lastAppliedYear : Int
+    };
+  stable shortMessages :
+    {
+      var root : Node__279997185<Text, ShortMessage__167215813>;
+      var size : Nat__93962160
+    };
+  stable socialLeaderboard :
+    {
+      var root : Node__279997185<Text, LeaderboardEntry__252692527>;
+      var size : Nat__93962160
+    };
+  stable var submitProofEmail : Text;
+  stable taxRecords :
+    {
+      var root : Node__279997185<QuarterKey__399345386, TaxRecord__789542463>;
+      var size : Nat__93962160
+    };
+  stable userProfiles :
+    {
+      var root : Node__279997185<Principal, UserProfile__491224006>;
+      var size : Nat__93962160
+    };
+  stable userReactionCounts :
+    {var root : Node__279997185<Text, Nat>; var size : Nat__93962160};
+  stable visitorCount : Nat
+});

@@ -1,0 +1,105 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = record {name: text;};
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type StripeSessionStatus = 
+ variant {
+   completed: record {
+                response: text;
+                userPrincipal: opt text;
+              };
+   failed: record {error: text;};
+ };
+type StripeConfiguration = 
+ record {
+   allowedCountries: vec text;
+   secretKey: text;
+ };
+type ShoppingItem = 
+ record {
+   currency: text;
+   priceInCents: nat;
+   productDescription: text;
+   productName: text;
+   quantity: nat;
+ };
+type Product = 
+ record {
+   editionType: text;
+   hasCustomImage: bool;
+   id: text;
+   images: vec text;
+   price: nat;
+   title: text;
+ };
+type PolicyType = 
+ variant {
+   cookiePolicy;
+   disclaimerLiability;
+   intellectualProperty;
+   privacyPolicy;
+   refundAndReturn;
+   shippingAndDelivery;
+   termsAndConditions;
+ };
+type PolicyContent = 
+ record {
+   content: text;
+   policyType: PolicyType;
+   title: text;
+ };
+type FileReference = 
+ record {
+   hash: text;
+   path: text;
+ };
+service : {
+  addProduct: (product: Product) -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  createCheckoutSession: (items: vec ShoppingItem, successUrl: text,
+   cancelUrl: text) -> (text);
+  deleteProduct: (productId: text) -> ();
+  dropFileReference: (path: text) -> ();
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getFileReference: (path: text) -> (FileReference) query;
+  getPolicyContent: (policyType: PolicyType) -> (PolicyContent) query;
+  getProducts: () -> (vec Product) query;
+  getStripeSessionStatus: (sessionId: text) -> (StripeSessionStatus);
+  getUserProfile: (user: principal) -> (opt UserProfile) query;
+  initializeAccessControl: () -> ();
+  isCallerAdmin: () -> (bool) query;
+  isStripeConfigured: () -> (bool) query;
+  listFileReferences: () -> (vec FileReference) query;
+  registerFileReference: (path: text, hash: text) -> ();
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  setStripeConfiguration: (config: StripeConfiguration) -> ();
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updatePolicyContent: (policyType: PolicyType, content: text) -> ();
+  updateProduct: (product: Product) -> ();
+}

@@ -1,0 +1,492 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+@font-face {
+  font-family: "Adobe Jenson Pro";
+  src: url("/fonts/AdobeJensonPro-BoldIt.otf") format("opentype");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light mode colors using OKLCH */
+    --background: oklch(100% 0 0);
+    --foreground: oklch(9% 0 0);
+    --card: oklch(100% 0 0);
+    --card-foreground: oklch(9% 0 0);
+    --popover: oklch(100% 0 0);
+    --popover-foreground: oklch(9% 0 0);
+    --primary: oklch(9% 0 0);
+    --primary-foreground: oklch(100% 0 0);
+    --secondary: oklch(96% 0 0);
+    --secondary-foreground: oklch(9% 0 0);
+    --muted: oklch(96% 0 0);
+    --muted-foreground: oklch(45% 0 0);
+    --accent: oklch(96% 0 0);
+    --accent-foreground: oklch(9% 0 0);
+    --destructive: oklch(50% 0.2 25);
+    --destructive-foreground: oklch(100% 0 0);
+    --border: oklch(90% 0 0);
+    --input: oklch(90% 0 0);
+    --ring: oklch(9% 0 0);
+    --radius: 0.5rem;
+    --chart-1: oklch(60% 0.15 250);
+    --chart-2: oklch(70% 0.15 150);
+    --chart-3: oklch(55% 0.15 30);
+    --chart-4: oklch(65% 0.15 90);
+    --chart-5: oklch(60% 0.15 330);
+  }
+
+  .dark {
+    /* Dark mode colors using OKLCH */
+    --background: oklch(9% 0 0);
+    --foreground: oklch(100% 0 0);
+    --card: oklch(9% 0 0);
+    --card-foreground: oklch(100% 0 0);
+    --popover: oklch(9% 0 0);
+    --popover-foreground: oklch(100% 0 0);
+    --primary: oklch(100% 0 0);
+    --primary-foreground: oklch(9% 0 0);
+    --secondary: oklch(15% 0 0);
+    --secondary-foreground: oklch(100% 0 0);
+    --muted: oklch(15% 0 0);
+    --muted-foreground: oklch(64% 0 0);
+    --accent: oklch(15% 0 0);
+    --accent-foreground: oklch(100% 0 0);
+    --destructive: oklch(45% 0.2 25);
+    --destructive-foreground: oklch(100% 0 0);
+    --border: oklch(15% 0 0);
+    --input: oklch(15% 0 0);
+    --ring: oklch(85% 0 0);
+    --chart-1: oklch(70% 0.15 210);
+    --chart-2: oklch(60% 0.15 150);
+    --chart-3: oklch(65% 0.15 30);
+    --chart-4: oklch(55% 0.15 90);
+    --chart-5: oklch(70% 0.15 330);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+      "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Global text protection — prevent copy/select on public site */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  /* Admin panel — allow normal text selection */
+  .admin-panel,
+  .admin-panel * {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+  }
+
+  /* Donations section in footer — allow copying crypto addresses / payment links */
+  .donations-copyable,
+  .donations-copyable * {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    cursor: text;
+  }
+
+  /* Form inputs should always be selectable/editable */
+  input,
+  textarea,
+  select {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Frosted Glass Effect - Shared Utility */
+.frosted-glass {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .frosted-glass {
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Frosted Glass Effect - Sidebar Variant (More Transparent on Mobile/Tablet) */
+.frosted-glass-sidebar {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.dark .frosted-glass-sidebar {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Desktop: Use standard frosted glass opacity */
+@media (min-width: 1280px) {
+  .frosted-glass-sidebar {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .dark .frosted-glass-sidebar {
+    background: rgba(0, 0, 0, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Adobe Jenson Pro font utility */
+.adobe-jenson {
+  font-family: "Adobe Jenson Pro", Georgia, serif;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* Responsive header title sizing with discrete breakpoints */
+.header-title {
+  /* Smallest screens: slightly smaller to avoid colliding with the 4-dot menu */
+  font-size: 1rem;
+}
+
+@media (min-width: 480px) {
+  .header-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .header-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .header-title {
+    font-size: 2rem;
+  }
+}
+
+.header-subtitle {
+  font-size: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+@media (min-width: 640px) {
+  .header-subtitle {
+    font-size: 0.625rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-subtitle {
+    font-size: 0.75rem;
+  }
+}
+
+/* Mobile menu styles */
+.mobile-menu-button {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px;
+}
+
+.mobile-menu-dot {
+  width: 4px;
+  height: 4px;
+  background-color: black;
+  border-radius: 50%;
+}
+
+/* Scroll margin for sections to account for fixed header */
+.scroll-mt-24 {
+  scroll-margin-top: 6rem;
+}
+
+/* Animations */
+@keyframes float-progress {
+  0%,
+  100% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-50%) translateX(10px);
+    opacity: 0.7;
+  }
+}
+
+@keyframes emitCharacterLeft {
+  0% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-50%) translateX(-400px);
+    opacity: 0;
+  }
+}
+
+@keyframes emitCharacterRight {
+  0% {
+    transform: translateY(-50%) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-50%) translateX(400px);
+    opacity: 0;
+  }
+}
+
+@keyframes emitCharacterLeftExtended {
+  0% {
+    transform: translate(-50%, -50%) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-50%, -50%) translateX(-1600px);
+    opacity: 0;
+  }
+}
+
+@keyframes emitCharacterRightExtended {
+  0% {
+    transform: translate(-50%, -50%) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-50%, -50%) translateX(1600px);
+    opacity: 0;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-3px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+/* Model Photo Panel Slide Animations */
+@keyframes slide-out-up {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out-down {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out-left {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-float-progress {
+  animation: float-progress 2s ease-in-out infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-slide-out-up {
+  animation: slide-out-up 0.5s ease-in-out forwards;
+}
+
+.animate-slide-out-down {
+  animation: slide-out-down 0.5s ease-in-out forwards;
+}
+
+.animate-slide-out-left {
+  animation: slide-out-left 0.5s ease-in-out forwards;
+}
+
+.animate-slide-out-right {
+  animation: slide-out-right 0.5s ease-in-out forwards;
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.5s ease-in-out forwards;
+}
+
+.animate-slide-in-down {
+  animation: slide-in-down 0.5s ease-in-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.5s ease-in-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.5s ease-in-out forwards;
+}
+
+/* Utility classes for emission animations */
+.emit-left {
+  animation: emitCharacterLeft 4s linear forwards;
+}
+
+.emit-right {
+  animation: emitCharacterRight 4s linear forwards;
+}
+
+.emit-left-extended {
+  animation: emitCharacterLeftExtended 8s linear forwards;
+}
+
+.emit-right-extended {
+  animation: emitCharacterRightExtended 8s linear forwards;
+}
+
+@keyframes typewriter-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}

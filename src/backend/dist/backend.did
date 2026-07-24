@@ -1,0 +1,981 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type _CaffeineStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _CaffeineStorageRefillInformation = record {
+                                           proposed_top_up_amount: opt nat;};
+type _CaffeineStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = 
+ record {
+   favouriteAuthorNotes: vec text;
+   favouriteGames: vec text;
+   favouriteReflections: vec text;
+   favouriteShortMessages: vec text;
+   favouriteVocabulary: vec text;
+   name: text;
+ };
+type UserFavourites = 
+ record {
+   authorNotes: vec text;
+   games: vec text;
+   reflections: vec text;
+   shortMessages: vec text;
+   vocabulary: vec text;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type TextBlock = 
+ record {
+   content: text;
+   title: text;
+ };
+type TaxRecord = 
+ record {
+   quarter: Quarter;
+   salesAmount: nat;
+   taxAmount: nat;
+   year: nat;
+ };
+type ShortMessage = 
+ record {
+   createdAt: int;
+   id: text;
+   "text": text;
+ };
+type SharedPaymentLogo = 
+ record {
+   id: text;
+   logoStorageKey: text;
+   logoUrl: text;
+   name: text;
+ };
+type RewardInput = 
+ record {
+   amount: nat;
+   availableCount: opt nat;
+   claimEmail: opt text;
+   description: text;
+   id: text;
+   pageType: variant {
+               retail;
+               social;
+             };
+   photoPath: opt text;
+   rewardType: variant {
+                 other;
+                 points;
+                 referral;
+               };
+ };
+type RewardFull = 
+ record {
+   amount: nat;
+   availableCount: opt nat;
+   claimEmail: opt text;
+   description: text;
+   id: text;
+   pageType: variant {
+               retail;
+               social;
+             };
+   photoPath: opt text;
+   rewardType: variant {
+                 other;
+                 points;
+                 referral;
+               };
+ };
+type ReviewMilestone = 
+ record {
+   milestone: nat;
+   prizeImagePath: opt text;
+ };
+type Review = 
+ record {
+   bookTitle: text;
+   companyBlogSite: opt text;
+   fullText: text;
+   id: text;
+   pageNumbers: text;
+   photoPath: opt text;
+   poemSubTitle: text;
+   poemTitle: text;
+   reactions: opt record {
+                    dislike: nat;
+                    laugh: nat;
+                    like: nat;
+                    love: nat;
+                  };
+   reviewerName: text;
+   snippet: text;
+   sourceLink: opt text;
+   starRating: opt nat;
+   videoUrl: opt text;
+ };
+type Result = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type ReflectionBlockReaction = 
+ variant {
+   dislike;
+   laugh;
+   like;
+   love;
+ };
+type ReflectionBlock = 
+ record {
+   id: text;
+   poemTitle: text;
+   reactions: opt record {
+                    dislike: nat;
+                    laugh: nat;
+                    like: nat;
+                    love: nat;
+                  };
+   reflectionChallenges: vec text;
+ };
+type Quarter = 
+ variant {
+   q1;
+   q2;
+   q3;
+   q4;
+ };
+type Product = 
+ record {
+   description: text;
+   editionType: text;
+   frontCoverImagePath: opt text;
+   hasCustomImage: bool;
+   id: text;
+   images: vec text;
+   price: nat;
+   title: text;
+ };
+type PolicyType = 
+ variant {
+   cookiePolicy;
+   disclaimerLiability;
+   intellectualProperty;
+   privacyPolicy;
+   promotionalTerms;
+   refundAndReturn;
+   shippingAndDelivery;
+   termsAndConditions;
+ };
+type PolicyContent = 
+ record {
+   content: text;
+   policyType: PolicyType;
+   title: text;
+ };
+type PaymentOption = 
+ record {
+   buttonColor: text;
+   buzzingEnabled: bool;
+   countryId: text;
+   enabled: bool;
+   fontColor: text;
+   id: text;
+   link: text;
+   logoStorageKey: text;
+   logoUrl: text;
+   methodName: text;
+   priceEuro: text;
+   shippingEuro: text;
+   sortOrder: nat;
+ };
+type PaymentCountry = 
+ record {
+   continent: text;
+   enabled: bool;
+   id: text;
+   name: text;
+   sortOrder: nat;
+ };
+type NewsletterSubscriber = 
+ record {
+   email: text;
+   principalId: text;
+   subscribedAt: int;
+ };
+type LeaderboardEntry = 
+ record {
+   id: text;
+   name: text;
+   photoPath: opt text;
+   score: nat;
+ };
+type HomepageTextBlocks = 
+ record {
+   block1: TextBlock;
+   block2: TextBlock;
+   block3: TextBlock;
+ };
+type GameReactionCounts = 
+ record {
+   dislike: nat;
+   laugh: nat;
+   like: nat;
+   love: nat;
+ };
+type GameReaction = 
+ variant {
+   dislike;
+   laugh;
+   like;
+   love;
+ };
+type GameComment = 
+ record {
+   authorName: text;
+   authorPrincipal: text;
+   commentText: text;
+   createdAt: int;
+   gameId: text;
+   id: text;
+ };
+type Game = 
+ record {
+   createdAt: int;
+   gameType: text;
+   id: text;
+   imageUrl: opt text;
+   materialsRequired: text;
+   playerCount: text;
+   rules: vec text;
+   title: text;
+ };
+type GalleryCarouselPhoto = 
+ record {
+   id: text;
+   linkUrl: text;
+   path: text;
+   side: text;
+   sortOrder: nat;
+ };
+type FooterSettings = 
+ record {
+   businessAddress: text;
+   businessEmail: text;
+   businessIban: text;
+   businessKvk: text;
+   businessName: text;
+   businessPhone: text;
+   businessTaxId: text;
+   footerCaption: text;
+ };
+type FileReference = 
+ record {
+   hash: text;
+   path: text;
+ };
+type ExperienceHubTexts = 
+ record {
+   gamesCardDescription: text;
+   gamesPageSubtitle: text;
+   mainSubtitle: text;
+   retailCardDescription: text;
+   retailPageSubtitle: text;
+   socialCardDescription: text;
+   socialPageSubtitle: text;
+ };
+type ExperienceChallenge = 
+ record {
+   category: ChallengeCategory;
+   description: text;
+   id: text;
+   rewardPoints: nat;
+   specialReward: opt text;
+   title: text;
+ };
+type EmojiRatioConfig = 
+ record {
+   dislikeMax: nat;
+   dislikeMin: nat;
+   laughMax: nat;
+   laughMin: nat;
+   likeMax: nat;
+   likeMin: nat;
+   loveMax: nat;
+   loveMin: nat;
+ };
+type EmojiBreakdown = 
+ record {
+   autoDislike: nat;
+   autoLaugh: nat;
+   autoLike: nat;
+   autoLove: nat;
+   userDislike: nat;
+   userLaugh: nat;
+   userLike: nat;
+   userLove: nat;
+ };
+type DonationEntry = 
+ record {
+   address: text;
+   column: nat;
+   id: text;
+   name: text;
+   position: nat;
+ };
+type DictionaryEntry = 
+ record {
+   etymology: text;
+   examples: text;
+   meaning: text;
+   word: text;
+ };
+type ChallengeCategory = 
+ variant {
+   retail;
+   social;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+type BookSale = 
+ record {
+   bookNumber: nat;
+   customerName: opt text;
+   salesAmount: nat;
+ };
+type BolBanner = 
+ record {
+   imagePath: text;
+   link: text;
+ };
+type BackgroundMusicTrack = 
+ record {
+   artist: text;
+   isActive: bool;
+   path: text;
+   title: text;
+   uploadTimestamp: int;
+ };
+type BackgroundMusicState = 
+ record {
+   activeTrack: opt text;
+   currentPlaylistIndex: nat;
+   musicEnabled: bool;
+   playlist: vec text;
+   settings:
+    record {
+      fadeInDuration: nat;
+      fadeOutDuration: nat;
+      shouldLoop: bool;
+      volume: nat;
+    };
+   tracks: vec BackgroundMusicTrack;
+ };
+type AuthorNoteReaction = 
+ variant {
+   dislike;
+   laugh;
+   like;
+   love;
+ };
+type AuthorNote = 
+ record {
+   id: text;
+   noteText: text;
+   poemSubtitle: text;
+   poemTitle: text;
+   reactions: record {
+                dislike: nat;
+                laugh: nat;
+                like: nat;
+                love: nat;
+              };
+ };
+type ArtProduct = 
+ record {
+   id: text;
+   imagePath: opt text;
+   purchaseLink: text;
+   title: text;
+ };
+type Announcement = 
+ record {
+   createdAt: int;
+   id: nat;
+   message: text;
+   title: text;
+   url: opt text;
+ };
+type AmazonRegion = 
+ record {
+   country: text;
+   currencySymbol: text;
+   domain: text;
+   enabled: bool;
+   hardcoverButtonColor: text;
+   hardcoverButtonText: text;
+   hardcoverFontColor: text;
+   hardcoverLink: text;
+   hardcoverPrice: text;
+   id: text;
+   kindleButtonColor: text;
+   kindleButtonText: text;
+   kindleFontColor: text;
+   kindleLink: text;
+   kindlePrice: text;
+   paperbackButtonColor: text;
+   paperbackButtonText: text;
+   paperbackFontColor: text;
+   paperbackLink: text;
+   paperbackPrice: text;
+   showKindleUnlimited: bool;
+ };
+service : {
+  _caffeineStorageBlobsToDelete: () -> (vec text) query;
+  _caffeineStorageConfirmBlobDeletion: (blobs: vec text) -> ();
+  _caffeineStorageCreateCertificate: (blob_hash: text) ->
+   (_CaffeineStorageCreateCertificateResult);
+  _caffeineStorageRefillCashier: (refillInformation:
+   opt _CaffeineStorageRefillInformation) -> (_CaffeineStorageRefillResult);
+  _caffeineStorageUpdateGatewayPrincipals: () -> ();
+  addAmazonRegion: (region: AmazonRegion) -> ();
+  addAnnouncement: (title: text, message: text, url: opt text) -> (nat);
+  addArtProduct: (artProduct: ArtProduct) -> ();
+  addAuthorNote: (poemTitle: text, poemSubtitle: text, noteText: text) ->
+   (variant {
+      err: text;
+      ok: AuthorNote;
+    });
+  addBookSale: (sale: BookSale) -> ();
+  addChallenge: (category: ChallengeCategory, title: text, description: 
+   text, rewardPoints: nat, specialReward: opt text) ->
+   (variant {
+      err: text;
+      ok: ExperienceChallenge;
+    });
+  addDictionaryEntry: (entry: DictionaryEntry) -> ();
+  addDonation: (name: text, address: text, column: nat, position: nat) ->
+   (text);
+  addFavourite: (itemType: text, itemId: text) -> (bool);
+  addGame: (title: text, gameType: text, playerCount: text,
+   materialsRequired: text, imageUrl: opt text, rules: vec text) -> (
+   text);
+  addGameComment: (gameId: text, commentText: text) -> (text);
+  addPaymentCountry: (country: PaymentCountry) -> (bool);
+  addPaymentOption: (option: PaymentOption) -> (bool);
+  addReflectionBlock: (block: ReflectionBlock) -> ();
+  addRetailLeaderboardEntry: (entry: LeaderboardEntry) -> ();
+  addReview: (review: Review) -> ();
+  addReviewMilestone: (milestone: ReviewMilestone) -> ();
+  addReward: (reward: RewardInput) -> ();
+  addSharedPaymentLogo: (logo: SharedPaymentLogo) -> (bool);
+  addShortMessage: ("text": text) -> (variant {
+                                        err: text;
+                                        ok: ShortMessage;
+                                      });
+  addSocialLeaderboardEntry: (entry: LeaderboardEntry) -> ();
+  addTaxRecord: ("record": TaxRecord) -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  calculateTax: (numberOfBooksSold: nat) -> (text) query;
+  createEmissionEffectAnimation: (numRows: nat, durationMs: nat, leftMargin:
+   nat, rightMargin: nat, expandFactor: nat) -> (record {animationId: nat;});
+  deactivateBackgroundMusicTrack: (trackPath: text) -> ();
+  deleteAmazonRegion: (regionId: text) -> ();
+  deleteArtProduct: (artProductId: text) -> ();
+  deleteAuthorNote: (id: text) -> (variant {
+                                     err: text;
+                                     ok;
+                                   });
+  deleteBookSale: (bookNumber: nat) -> ();
+  deleteChallenge: (id: text) -> (variant {
+                                    err: text;
+                                    ok;
+                                  });
+  deleteDictionaryEntry: (word: text) -> ();
+  deleteDonation: (id: text) -> (bool);
+  deleteGalleryCarouselPhoto: (id: text) -> (variant {
+                                               err: text;
+                                               ok;
+                                             });
+  deleteGame: (id: text) -> (bool);
+  deleteGameComment: (commentId: text) -> (bool);
+  deletePaymentCountry: (id: text) -> (bool);
+  deletePaymentOption: (id: text) -> (bool);
+  deleteReflectionBlock: (blockId: text) -> ();
+  deleteRetailLeaderboardEntry: (entryId: text) -> ();
+  deleteReview: (reviewId: text) -> ();
+  deleteReviewMilestone: (milestone: nat) -> ();
+  deleteReward: (rewardId: text) -> ();
+  deleteSharedPaymentLogo: (id: text) -> (bool);
+  deleteShortMessage: (id: text) -> (variant {
+                                       err: text;
+                                       ok: bool;
+                                     });
+  deleteSocialLeaderboardEntry: (entryId: text) -> ();
+  deleteTaxRecord: (year: nat, quarter: Quarter) -> ();
+  /// Admin-only: manually distribute totalAmount emoji reactions across all items
+  /// in the given section, randomly within the configured ratio ranges.
+  /// Adds to existing counts — never replaces or removes existing data.
+  /// section: "reviews" | "challenges" | "authorNotes" | "games"
+  distributeEmojiManually: (section: text, totalAmount: nat) -> ();
+  dropFileReference: (path: text) -> ();
+  ensureBitcoinForAllCountries: () -> ();
+  ensureCreditcardForAllCountries: () -> ();
+  ensureEthereumForAllCountries: () -> ();
+  ensureIcpForAllCountries: () -> ();
+  execute: (qJson: text) -> (Result) query;
+  getActiveBackgroundMusicTrack: () -> (opt text) query;
+  getAllFileReferences: () -> (vec FileReference) query;
+  getAmazonRegion: (regionId: text) -> (opt AmazonRegion) query;
+  getAmazonRegionForBook: (bookKey: text, regionId: text) ->
+   (opt AmazonRegion) query;
+  getAmazonRegions: () -> (vec AmazonRegion) query;
+  getAmazonRegionsByBook: (bookKey: text) -> (vec AmazonRegion) query;
+  /// Query: is the Amazon region payment section enabled for Anna?
+  getAnnaAmazonEnabled: () -> (bool) query;
+  /// Query: is the Amazon region payment section enabled for
+  /// "The Song of Anna the Mermaid" 1st edition?
+  getAnnaSongAmazonEnabled: () -> (bool) query;
+  getAnnouncementRotationInterval: () -> (nat) query;
+  getAnnouncements: () -> (vec Announcement) query;
+  getApproximateBtcAmount: (_eurAmount: float64) -> (float64) query;
+  getArtProduct: (artProductId: text) -> (opt ArtProduct) query;
+  getArtProducts: () -> (vec ArtProduct) query;
+  getArtProductsSectionData: () -> (record {description: text;}) query;
+  getAuthorNotes: () -> (vec AuthorNote) query;
+  getBackgroundMusic: () -> (BackgroundMusicState) query;
+  getBackgroundMusicEnabled: () -> (bool) query;
+  getBackgroundMusicSettings: () ->
+   (record {
+      fadeInDuration: nat;
+      fadeOutDuration: nat;
+      shouldLoop: bool;
+      volume: nat;
+    }) query;
+  getBackgroundMusicTracks: () -> (vec BackgroundMusicTrack) query;
+  getBitcoinInstructionText: () -> (text) query;
+  getBitcoinPaymentAmount: () ->
+   (record {
+      amount: text;
+      currency: text;
+    }) query;
+  getBitcoinPaymentConfig: () ->
+   (record {
+      contactEmail: text;
+      walletAddress: text;
+    }) query;
+  getBitcoinPaymentDetails: () ->
+   (record {
+      btcAddress: text;
+      btcEurAmount: text;
+      qrCodeImagePath: text;
+    }) query;
+  getBitcoinPaymentModalState: () ->
+   (record {
+      isOpen: bool;
+      lastUpdateTimestamp: int;
+    }) query;
+  getBolBanner: () -> (BolBanner) query;
+  getBoldedDeliveryInfoText: () -> (text) query;
+  getBookSales: () -> (vec BookSale) query;
+  getBtcAddress: () -> (text) query;
+  getBtcEurPrice: () -> (float64);
+  getBtcEurRate: () -> (float64);
+  getBtcExchangeRate: () -> (opt float64) query;
+  getBtcOrangeColor: () -> (text) query;
+  getCallerGameReaction: (gameId: text) -> (opt GameReaction) query;
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getChallenges: () -> (vec ExperienceChallenge) query;
+  getChallengesByCategory: (category: ChallengeCategory) ->
+   (vec ExperienceChallenge) query;
+  getCopyrightSettings: () ->
+   (record {
+      copyrightLegalText: text;
+      copyrightLine: text;
+      copyrightStartYear: nat;
+      copyrightYearColor: text;
+    }) query;
+  getCryptoRates: () -> (record {
+                           btc: float64;
+                           eth: float64;
+                           icp: float64;
+                         });
+  /// Query: is the crypto payment system currently enabled?
+  getCryptoSystemEnabled: () -> (bool) query;
+  getCurrentReviewNumber: () -> (nat) query;
+  getDefaultArtProducts: () -> (vec ArtProduct) query;
+  getDefaultReviews: () -> (vec Review) query;
+  getDictionaryEntry: (word: text) -> (opt DictionaryEntry) query;
+  getDisclaimerText: () -> (text) query;
+  getDiscordUrl: () -> (text) query;
+  /// Read-only preview: returns what WOULD be distributed if distributeEmojiManually
+  /// were called with the given section and totalAmount.
+  /// Returns [(itemId, love, like, laugh, dislike)] — does NOT apply anything.
+  getDistributionPreview: (section: text, totalAmount: nat) ->
+   (vec record {
+          text;
+          nat;
+          nat;
+          nat;
+          nat;
+        }) query;
+  /// Query: is the Amazon region payment section enabled for Emilie?
+  getEmilieAmazonEnabled: () -> (bool) query;
+  /// Query: is the Amazon region payment section enabled for
+  /// "Emilie en de Ruïne van Azoth" 1st edition?
+  getEmilieNlAmazonEnabled: () -> (bool) query;
+  /// Query: is the emoji/reaction counter system currently enabled?
+  getEmojiSystemEnabled: () -> (bool) query;
+  getEthAddress: () -> (text) query;
+  /// Returns the live ETH/EUR price (calls the mixin's cached CoinGecko fetch).
+  getEthEurPrice: () -> (float64);
+  getEthEurRate: () -> (float64);
+  getExperienceHubTexts: () -> (ExperienceHubTexts) query;
+  getFeaturedProductButtonTexts: () ->
+   (record {
+      firstProductButtonText: text;
+      secondProductButtonText: text;
+    }) query;
+  getFileReference: (path: text) -> (opt FileReference) query;
+  getFirstProductPrice: () -> (text) query;
+  getFooterCopyright: () -> (text) query;
+  getFooterSettings: () -> (FooterSettings) query;
+  getGalleryCarouselPhotos: () -> (vec GalleryCarouselPhoto) query;
+  getGameComments: (gameId: text) -> (vec GameComment) query;
+  getGameReactionCounts: (gameId: text) -> (GameReactionCounts) query;
+  /// Return game reaction counts including automated inflation.
+  getGameReactionCountsInflated: (gameId: text) -> (GameReactionCounts) query;
+  getGames: () -> (vec Game) query;
+  getHomepageTextBlocks: () ->
+   (record {
+      block1: TextBlock;
+      block2: TextBlock;
+      block3: TextBlock;
+    }) query;
+  getHomepageTextBlocksAnnaEn: () -> (HomepageTextBlocks) query;
+  getHomepageTextBlocksAnnaNl: () -> (HomepageTextBlocks) query;
+  getHomepageTextBlocksEmilieEn: () -> (HomepageTextBlocks) query;
+  getHomepageTextBlocksEmilieNl: () -> (HomepageTextBlocks) query;
+  getIcpAddress: () -> (text) query;
+  /// Returns the live ICP/EUR price (calls the mixin's cached CoinGecko fetch).
+  getIcpEurPrice: () -> (float64);
+  getIcpEurRate: () -> (float64);
+  /// Public query: returns the current emoji inflation ratio config.
+  getInflationRatios: () -> (EmojiRatioConfig) query;
+  /// Admin-only: full raw distribution stats for the monitor panel.
+  getInflationStats: () ->
+   (record {
+      automatedCounts: vec record {
+                             text;
+                             nat;
+                           };
+      lastRunTime: int;
+      launchTime: int;
+      totalEntities: nat;
+      userCounts: vec record {
+                        text;
+                        nat;
+                      };
+    }) query;
+  /// Admin-only: summary grouped by section (review / reflection / author_note / game).
+  /// Returns per-section, per-emoji breakdown: automated counts vs user-clicked counts.
+  getInflationSummary: () ->
+   (record {
+      bySection: vec record {
+                       text;
+                       EmojiBreakdown;
+                     };
+      totalAutomated: nat;
+      totalUser: nat;
+    }) query;
+  getInternationalCustomerCheckoutUrl: () -> (text) query;
+  getMarktplaatsButtonText: () -> (text) query;
+  getMediumUrl: () -> (text) query;
+  getMyNewsletterSubscription: () -> (opt NewsletterSubscriber) query;
+  getPayPalButtonText: () -> (text) query;
+  getPayPalButtonUrl: () -> (text) query;
+  getPaymentCountries: () -> (vec PaymentCountry) query;
+  getPaymentOptions: () -> (vec PaymentOption) query;
+  getPaymentOptionsByCountry: (countryId: text) -> (vec PaymentOption) query;
+  getPolicyContent: (policyType: PolicyType) -> (PolicyContent) query;
+  getPopupInstructions: () ->
+   (record {
+      mollieInstruction: text;
+      revolutInstruction: text;
+    }) query;
+  getProductByKey: (textKey: text) -> (opt Product) query;
+  getProducts: () -> (vec Product) query;
+  getPromotionalTermsContent: () -> (text) query;
+  getPurchaseButtonInstructionalText: () -> (text) query;
+  getPurchaseButtonUrl: () -> (text) query;
+  getQrCodeImagePath: () -> (text) query;
+  getRandomArtProductsLayout: (numImages: nat) ->
+   (record {
+      imageIndex: nat;
+      rotation: nat;
+      x: nat;
+      y: nat;
+    });
+  getRandomCharacters: (numCharacters: nat) ->
+   (vec variant {
+          character: text;
+          position: nat;
+        });
+  getRandomEmissionCharacters: (numCharacters: nat, direction:
+   variant {
+     left;
+     right;
+   }) -> (vec text);
+  getRandomGalleryLayout: (numImages: nat) ->
+   (record {
+      imageIndex: nat;
+      rotation: nat;
+      x: nat;
+      y: nat;
+    });
+  getReflectionBlock: (blockId: text) -> (opt ReflectionBlock) query;
+  getReflectionBlocks: () -> (vec ReflectionBlock) query;
+  getRetailLeaderboard: () -> (vec LeaderboardEntry) query;
+  getRetailRewards: () -> (vec RewardFull) query;
+  getReview: (reviewId: text) -> (opt Review) query;
+  getReviewBookTitles: () -> (vec text) query;
+  getReviewEmojiCountsV2: (reviewId: text) ->
+   (record {
+      dislike: nat;
+      laugh: nat;
+      like: nat;
+      love: nat;
+    }) query;
+  getReviewMilestones: () -> (vec ReviewMilestone) query;
+  getReviews: () -> (vec Review) query;
+  getReviewsByBookTitle: (bookTitle: text) -> (vec Review) query;
+  getRevolutPayButtonTextFirstProduct: () -> (text) query;
+  getRevolutPayButtonTextSecondProduct: () -> (text) query;
+  getRevolutPayButtonUrl: () -> (text) query;
+  getRoadmapSectionData: () ->
+   (record {
+      currentReviews: nat;
+      description: text;
+      progressPercentage: nat;
+      title: text;
+    }) query;
+  getSecondProductPayPalUrl: () -> (text) query;
+  getSecondProductPrice: () -> (text) query;
+  getSharedPaymentLogos: () -> (vec SharedPaymentLogo) query;
+  getShippingNote: () -> (text) query;
+  getSocialLeaderboard: () -> (vec LeaderboardEntry) query;
+  getSocialRewards: () -> (vec RewardFull) query;
+  getSpiralFlowerPattern: (spawnX: nat, spawnY: nat, colorCode: text) ->
+   (record {
+      bloomDurationMs: nat;
+      bloomStartTime: int;
+      centerX: nat;
+      centerY: nat;
+      isBlooming: bool;
+      patternId: nat;
+      spiralColor: text;
+    });
+  getSubmitProofEmail: () -> (text) query;
+  getTaxRecords: () -> (vec TaxRecord) query;
+  getTelegramUrl: () -> (text) query;
+  getTiktokUrl: () -> (text) query;
+  getUserFavourites: () -> (UserFavourites) query;
+  getUserProfile: (user: principal) -> (opt UserProfile) query;
+  getUserReviewReactionV2: (reviewId: text) -> (opt text) query;
+  getViaMarktplaatsButtonUrl: () -> (text) query;
+  getViaVintedButtonUrl: () -> (text) query;
+  getVintedButtonText: () -> (text) query;
+  getWatermarkedCharacters: (numCharacters: nat) -> (vec text);
+  initializeAccessControl: () -> ();
+  isCallerAdmin: () -> (bool) query;
+  listDictionaryEntries: () -> (vec DictionaryEntry) query;
+  listDonations: () -> (vec DonationEntry) query;
+  listFileReferences: () -> (vec FileReference) query;
+  listNewsletterSubscribers: () -> (vec NewsletterSubscriber) query;
+  listShortMessages: () -> (vec ShortMessage) query;
+  reactToAuthorNote: (noteId: text, reaction: AuthorNoteReaction) ->
+   (variant {
+      err: text;
+      ok: AuthorNote;
+    });
+  reactToGame: (gameId: text, reaction: GameReaction) -> (bool);
+  /// React to a game and track user engagement for inflation weighting.
+  reactToGameAndTrack: (gameId: text, reaction: GameReaction) -> (bool);
+  reactToReflectionBlock: (blockId: text, reaction:
+   ReflectionBlockReaction) -> (variant {
+                                  err: text;
+                                  ok: ReflectionBlock;
+                                });
+  reactToReviewV2: (reviewId: text, reaction: text) -> ();
+  registerFileReference: (path: text, hash: text) -> ();
+  removeAmazonRegionFromBook: (bookKey: text, regionId: text) -> ();
+  removeAnnouncement: (id: nat) -> (bool);
+  removeBackgroundMusicTrack: (trackPath: text) -> ();
+  removeFavourite: (itemType: text, itemId: text) -> (bool);
+  removeNewsletterSubscriber: (principalId: text) ->
+   (variant {
+      err: text;
+      ok: text;
+    });
+  reorderGalleryCarouselPhotos: (orderedIds: vec text) ->
+   (variant {
+      err: text;
+      ok;
+    });
+  /// Admin-only: reset the manual distribution counts (e.g. for a clean slate).
+  /// Does NOT touch per-item user reaction data.
+  resetInflationCounts: () -> ();
+  saveAmazonRegionForBook: (bookKey: text, region: AmazonRegion) -> ();
+  saveAmazonRegionsByBook: (bookKey: text, regions: vec AmazonRegion) -> ();
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  saveGalleryCarouselPhoto: (id: text, path: text, linkUrl: text, sortOrder:
+   nat, side: text) -> (variant {
+                          err: text;
+                          ok;
+                        });
+  schema: () -> (text) query;
+  setActiveBackgroundMusicTrack: (trackPath: text) -> ();
+  setAmazonRegions: (regions: vec AmazonRegion) -> ();
+  /// Admin-only: show or hide the Amazon region payment section for Anna.
+  setAnnaAmazonEnabled: (enabled: bool) -> ();
+  /// Admin-only: show or hide the Amazon region payment section for
+  /// "The Song of Anna the Mermaid" 1st edition.
+  setAnnaSongAmazonEnabled: (enabled: bool) -> ();
+  setAnnouncementRotationInterval: (seconds: nat) -> (bool);
+  setBackgroundMusicEnabled: (enabled: bool) -> ();
+  setBackgroundMusicPlaylist: (playlist: vec text) -> ();
+  setBtcContactEmail: (email: text) -> (bool);
+  setBtcWalletAddress: (address: text) -> (bool);
+  /// Admin-only: enable or disable the crypto payment system.
+  setCryptoSystemEnabled: (enabled: bool) -> ();
+  /// Admin-only: show or hide the Amazon region payment section for Emilie.
+  setEmilieAmazonEnabled: (enabled: bool) -> ();
+  /// Admin-only: show or hide the Amazon region payment section for
+  /// "Emilie en de Ruïne van Azoth" 1st edition.
+  setEmilieNlAmazonEnabled: (enabled: bool) -> ();
+  /// Admin-only: enable or disable the emoji inflation engine and reaction counters.
+  setEmojiSystemEnabled: (enabled: bool) -> ();
+  setEthWalletAddress: (address: text) -> (bool);
+  setIcpWalletAddress: (address: text) -> (bool);
+  /// Admin-only: update the emoji inflation ratio config.
+  setInflationRatios: (config: EmojiRatioConfig) -> ();
+  subscribeToNewsletter: (email: text) -> (variant {
+                                             err: text;
+                                             ok: text;
+                                           });
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  /// No-op: kept for frontend binding compatibility.
+  /// Automatic inflation has been removed. All emoji distribution is manual via distributeEmojiManually().
+  triggerInflation: () -> ();
+  unsubscribeFromNewsletter: () -> (variant {
+                                      err: text;
+                                      ok: text;
+                                    });
+  updateAmazonRegion: (region: AmazonRegion) -> ();
+  updateAnnouncement: (id: nat, title: text, message: text, url: opt text) ->
+   (bool);
+  updateArtProduct: (artProduct: ArtProduct) -> ();
+  updateAuthorNote: (id: text, poemTitle: text, poemSubtitle: text, noteText:
+   text) -> (variant {
+               err: text;
+               ok: AuthorNote;
+             });
+  updateBackgroundMusicSettings: (settings:
+   record {
+     fadeInDuration: nat;
+     fadeOutDuration: nat;
+     shouldLoop: bool;
+     volume: nat;
+   }) -> ();
+  updateBookSale: (sale: BookSale) -> ();
+  updateBtcExchangeRate: (_rate: float64) -> ();
+  updateChallenge: (id: text, category: ChallengeCategory, title: text,
+   description: text, rewardPoints: nat, specialReward: opt text) ->
+   (variant {
+      err: text;
+      ok: ExperienceChallenge;
+    });
+  updateCopyrightSettings: (line: text, startYear: nat, yearColor: text,
+   legalText: text) -> ();
+  updateCurrentReviewNumber: (reviewNumber: nat) -> ();
+  updateDictionaryEntry: (entry: DictionaryEntry) -> ();
+  updateDonation: (id: text, name: text, address: text, column: nat,
+   position: nat) -> (bool);
+  updateExperienceHubTexts: (texts: ExperienceHubTexts) -> ();
+  updateFooterSettings: (settings: FooterSettings) -> ();
+  updateGame: (id: text, title: text, gameType: text, playerCount: text,
+   materialsRequired: text, imageUrl: opt text, rules: opt vec text) ->
+   (bool);
+  updateHomepageTextBlocks: (blocks:
+   record {
+     block1: TextBlock;
+     block2: TextBlock;
+     block3: TextBlock;
+   }) -> ();
+  updateHomepageTextBlocksAnnaEn: (blocks: HomepageTextBlocks) -> ();
+  updateHomepageTextBlocksAnnaNl: (blocks: HomepageTextBlocks) -> ();
+  updateHomepageTextBlocksEmilieEn: (blocks: HomepageTextBlocks) -> ();
+  updateHomepageTextBlocksEmilieNl: (blocks: HomepageTextBlocks) -> ();
+  updatePaymentCountry: (country: PaymentCountry) -> (bool);
+  updatePaymentOption: (option: PaymentOption) -> (bool);
+  updatePolicyContent: (policyType: PolicyType, content: text) -> ();
+  updateProductByKey: (textKey: text, product: Product) -> (bool);
+  updatePromotionalTermsContent: (content: text) -> ();
+  updateReflectionBlock: (block: ReflectionBlock) -> ();
+  updateRetailLeaderboardEntry: (entry: LeaderboardEntry) -> ();
+  updateReview: (review: Review) -> ();
+  updateReviewMilestone: (milestone: ReviewMilestone) -> ();
+  updateReward: (reward: RewardInput) -> ();
+  updateSharedPaymentLogo: (logo: SharedPaymentLogo) -> (bool);
+  updateShortMessage: (id: text, "text": text) ->
+   (variant {
+      err: text;
+      ok: ShortMessage;
+    });
+  updateSocialLeaderboardEntry: (entry: LeaderboardEntry) -> ();
+  updateSubmitProofEmail: (email: text) -> ();
+  updateTaxRecord: ("record": TaxRecord) -> ();
+  uploadBackgroundMusicTrack: (track: BackgroundMusicTrack) -> ();
+}

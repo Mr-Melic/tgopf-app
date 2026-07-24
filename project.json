@@ -1,0 +1,19 @@
+{
+  "overview": "A poetry book webshop with bilingual about-sections, per-book review filtering, and a 6-product cover management admin.",
+  "features": [
+    "Bilingual EN/Dutch toggle for Emilie and Anna book about-sections",
+    "Book-title filter bar for reader reviews across all 6 titles",
+    "Admin review form with book-title dropdown",
+    "6 editable product cards with cover upload, gallery removed",
+    "Shared 6-book-titles constant across the app"
+  ],
+  "category": "productivity",
+  "tags": [
+    "poetry",
+    "webshop",
+    "books",
+    "bilingual",
+    "admin"
+  ],
+  "last_updated": "2026-07-24T12:08:12.633Z"
+}
