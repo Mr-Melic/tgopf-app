@@ -789,6 +789,7 @@ export const idlService = IDL.Service({
       ['query'],
     ),
   'getInternationalCustomerCheckoutUrl' : IDL.Func([], [IDL.Text], ['query']),
+  'getMaintenanceNoticeEnabled' : IDL.Func([], [IDL.Bool], ['query']),
   'getMarktplaatsButtonText' : IDL.Func([], [IDL.Text], ['query']),
   'getMediumUrl' : IDL.Func([], [IDL.Text], ['query']),
   'getMyNewsletterSubscription' : IDL.Func(
@@ -1009,6 +1010,7 @@ export const idlService = IDL.Service({
   'setEthWalletAddress' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'setIcpWalletAddress' : IDL.Func([IDL.Text], [IDL.Bool], []),
   'setInflationRatios' : IDL.Func([EmojiRatioConfig], [], []),
+  'setMaintenanceNoticeEnabled' : IDL.Func([IDL.Bool], [], []),
   'subscribeToNewsletter' : IDL.Func(
       [IDL.Text],
       [IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text })],
@@ -1919,6 +1921,7 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'getInternationalCustomerCheckoutUrl' : IDL.Func([], [IDL.Text], ['query']),
+    'getMaintenanceNoticeEnabled' : IDL.Func([], [IDL.Bool], ['query']),
     'getMarktplaatsButtonText' : IDL.Func([], [IDL.Text], ['query']),
     'getMediumUrl' : IDL.Func([], [IDL.Text], ['query']),
     'getMyNewsletterSubscription' : IDL.Func(
@@ -2163,6 +2166,7 @@ export const idlFactory = ({ IDL }) => {
     'setEthWalletAddress' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'setIcpWalletAddress' : IDL.Func([IDL.Text], [IDL.Bool], []),
     'setInflationRatios' : IDL.Func([EmojiRatioConfig], [], []),
+    'setMaintenanceNoticeEnabled' : IDL.Func([IDL.Bool], [], []),
     'subscribeToNewsletter' : IDL.Func(
         [IDL.Text],
         [IDL.Variant({ 'ok' : IDL.Text, 'err' : IDL.Text })],

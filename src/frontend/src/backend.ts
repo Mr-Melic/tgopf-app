@@ -748,6 +748,12 @@ export interface backendInterface {
         bySection: Array<[string, EmojiBreakdown]>;
     }>;
     getInternationalCustomerCheckoutUrl(): Promise<string>;
+    /**
+     * / Query: is the site-wide maintenance notice popup currently enabled?
+     * / Default true after deploy. The frontend shows a large modal overlay on
+     * / every page when this returns true; dismissal is per-session.
+     */
+    getMaintenanceNoticeEnabled(): Promise<boolean>;
     getMarktplaatsButtonText(): Promise<string>;
     getMediumUrl(): Promise<string>;
     getMyNewsletterSubscription(): Promise<NewsletterSubscriber | null>;
@@ -938,6 +944,10 @@ export interface backendInterface {
      * / Admin-only: update the emoji inflation ratio config.
      */
     setInflationRatios(config: EmojiRatioConfig): Promise<void>;
+    /**
+     * / Admin-only: enable or disable the site-wide maintenance notice popup.
+     */
+    setMaintenanceNoticeEnabled(enabled: boolean): Promise<void>;
     subscribeToNewsletter(email: string): Promise<{
         __kind__: "ok";
         ok: string;
@@ -3024,6 +3034,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async getMaintenanceNoticeEnabled(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getMaintenanceNoticeEnabled();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getMaintenanceNoticeEnabled();
+            return result;
+        }
+    }
     async getMarktplaatsButtonText(): Promise<string> {
         if (this.processError) {
             try {
@@ -4390,6 +4414,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.setInflationRatios(arg0);
+            return result;
+        }
+    }
+    async setMaintenanceNoticeEnabled(arg0: boolean): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setMaintenanceNoticeEnabled(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setMaintenanceNoticeEnabled(arg0);
             return result;
         }
     }

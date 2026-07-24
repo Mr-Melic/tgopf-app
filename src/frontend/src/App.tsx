@@ -15,6 +15,7 @@ import BackgroundMusicPlayer from "./components/BackgroundMusicPlayer";
 import ErrorBoundary from "./components/ErrorBoundary";
 import HomepageMediaPreloader from "./components/HomepageMediaPreloader";
 import LoadingScreen from "./components/LoadingScreen";
+import MaintenanceNoticePopup from "./components/MaintenanceNoticePopup";
 import Navigation from "./components/Navigation";
 import TypewriterMessage from "./components/TypewriterMessage";
 import { Toaster } from "./components/ui/sonner";
@@ -26,6 +27,7 @@ import {
   useGetFooterSettings,
   useGetMyNewsletterSubscription,
   useGetReviews,
+  useInitializeAccessControl,
   useListDonations,
   useListShortMessages,
   useSubscribeToNewsletter,
@@ -209,6 +211,49 @@ function App() {
   const [showUnsubscribeConfirm, setShowUnsubscribeConfirm] = useState(false);
 
   const isAuthenticated = !!identity;
+
+  // ── First-login-becomes-admin initialization ──────────────────────────────
+  // The backend's initializeAccessControl() endpoint is guarded: it only
+  // assigns the caller as #admin when no admin exists yet (adminAssigned is
+  // false). Once an admin exists, repeated calls are safe no-ops. We fire it
+  // exactly once per authenticated session as soon as the actor is ready, so
+  // the first logged-in account becomes the admin. After the call succeeds,
+  // the mutation invalidates the isCallerAdmin / currentUserRole query caches
+  // so the Admin Dashboard button appears without a manual reload.
+  //
+  // This follows the useIsCallerAdmin self-heal pattern: a useEffect watches
+  // actor readiness + authenticated-principal presence, fires a one-shot
+  // mutation, and logs a console.warn on error.
+  const { actor: initActor, isFetching: initActorFetching } = useActor();
+  const initializeAccessControl = useInitializeAccessControl();
+  const initFiredRef = useRef(false);
+
+  useEffect(() => {
+    // Only fire when: actor is ready (not fetching), an authenticated
+    // (non-anonymous) principal is present, and we have not already fired
+    // for this authenticated session.
+    if (
+      !initFiredRef.current &&
+      !!initActor &&
+      !initActorFetching &&
+      isAuthenticated
+    ) {
+      initFiredRef.current = true;
+      initializeAccessControl.mutate(undefined, {
+        onError: (err) => {
+          console.warn(
+            "App: initializeAccessControl failed on first login.",
+            err instanceof Error ? err.message : err,
+          );
+        },
+      });
+    }
+    // Reset the one-shot flag when the user logs out (identity becomes null)
+    // so a subsequent login fires the initialization again.
+    if (!isAuthenticated) {
+      initFiredRef.current = false;
+    }
+  }, [initActor, initActorFetching, isAuthenticated, initializeAccessControl]);
 
   // Footer short message — typewriter cycle, true random, independent from header
   const [footerMsgIndex, setFooterMsgIndex] = useState(0);
@@ -1239,6 +1284,7 @@ Unauthorized use, duplication, distribution, scraping, indexing, or exhibition o
             </footer>
           )}
 
+          <MaintenanceNoticePopup />
           <Toaster />
         </div>
       </ErrorBoundary>

@@ -185,6 +185,14 @@ import OqlValueId "lib/OqlValueId";
     /// Default false — the book is not yet live on Amazon.
     let emilieNlAmazonState = { var enabled : Bool = false };
 
+    /// Controls whether the site-wide maintenance notice popup is shown to
+    /// visitors. Default true — the notice is ON after deploy. The frontend
+    /// renders a large modal overlay on every page when enabled; dismissal is
+    /// remembered per-session via sessionStorage, so the popup reappears in
+    /// new sessions while this stays ON. Admins toggle it from the System
+    /// section. Additive state only — no other stable declarations touched.
+    let maintenanceNotice = { var enabled : Bool = true };
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     /// Add n to userReactionCounts[key].
@@ -3045,6 +3053,21 @@ import OqlValueId "lib/OqlValueId";
             Runtime.trap("Unauthorized");
         };
         emilieNlAmazonState.enabled := enabled;
+    };
+
+    /// Query: is the site-wide maintenance notice popup currently enabled?
+    /// Default true after deploy. The frontend shows a large modal overlay on
+    /// every page when this returns true; dismissal is per-session.
+    public query func getMaintenanceNoticeEnabled() : async Bool {
+        maintenanceNotice.enabled;
+    };
+
+    /// Admin-only: enable or disable the site-wide maintenance notice popup.
+    public shared ({ caller }) func setMaintenanceNoticeEnabled(enabled : Bool) : async () {
+        if (not (AccessControl.isAdmin(accessControlState, caller))) {
+            Runtime.trap("Unauthorized");
+        };
+        maintenanceNotice.enabled := enabled;
     };
 
     // ─── OQL (Data Intelligence) — Expose mixin ───────────────────────────────

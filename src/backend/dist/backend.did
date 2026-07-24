@@ -738,6 +738,10 @@ service : {
       totalUser: nat;
     }) query;
   getInternationalCustomerCheckoutUrl: () -> (text) query;
+  /// Query: is the site-wide maintenance notice popup currently enabled?
+  /// Default true after deploy. The frontend shows a large modal overlay on
+  /// every page when this returns true; dismissal is per-session.
+  getMaintenanceNoticeEnabled: () -> (bool) query;
   getMarktplaatsButtonText: () -> (text) query;
   getMediumUrl: () -> (text) query;
   getMyNewsletterSubscription: () -> (opt NewsletterSubscriber) query;
@@ -908,6 +912,8 @@ service : {
   setIcpWalletAddress: (address: text) -> (bool);
   /// Admin-only: update the emoji inflation ratio config.
   setInflationRatios: (config: EmojiRatioConfig) -> ();
+  /// Admin-only: enable or disable the site-wide maintenance notice popup.
+  setMaintenanceNoticeEnabled: (enabled: bool) -> ();
   subscribeToNewsletter: (email: text) -> (variant {
                                              err: text;
                                              ok: text;

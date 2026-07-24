@@ -5,6 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import { type AmazonRegion, UserRole } from "../backend";
 import type {
   AuthorNote,
@@ -234,7 +235,7 @@ export function useGetCallerUserRole() {
 export function useIsCallerAdmin() {
   const { actor, isFetching } = useActor();
 
-  return useQuery<boolean>({
+  const query = useQuery<boolean>({
     queryKey: ["isCallerAdmin"],
     queryFn: async () => {
       if (!actor) {
@@ -260,6 +261,35 @@ export function useIsCallerAdmin() {
     // admin status instead of replacing it with undefined/false
     placeholderData: keepPreviousData,
   });
+
+  // ── B3: Resilience for the admin-check error state ─────────────────────────
+  // When the admin check is in an ERROR state (query isError, not a confirmed
+  // false), automatically retry ONCE the actor becomes ready (transitions from
+  // undefined/fetching to a valid actor). Log a console warning naming the
+  // error so transient failures are observable. This benefits every consumer
+  // of useIsCallerAdmin (Navigation admin button, AdminDashboard gating,
+  // GameComments moderation UI) without changing their gating logic.
+  const retriedRef = useRef(false);
+  useEffect(() => {
+    // Only retry when: query is in error state, actor is now ready, and we
+    // have not already fired the one-shot retry for this error cycle.
+    if (query.isError && !!actor && !isFetching && !retriedRef.current) {
+      retriedRef.current = true;
+      const err = query.error;
+      console.warn(
+        "useIsCallerAdmin: admin check failed, retrying once now that actor is ready.",
+        err instanceof Error ? err.message : err,
+      );
+      query.refetch();
+    }
+    // Reset the one-shot retry flag once the query leaves the error state
+    // (success or a fresh error cycle after actor re-becomes undefined).
+    if (!query.isError) {
+      retriedRef.current = false;
+    }
+  }, [query.isError, query.error, query.refetch, actor, isFetching]);
+
+  return query;
 }
 
 export function useSaveCallerUserProfile() {
@@ -273,6 +303,38 @@ export function useSaveCallerUserProfile() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["currentUserProfile"] });
+    },
+  });
+}
+
+// ── Access control initialization (first-login-becomes-admin) ──────────────────
+// The backend's initializeAccessControl() endpoint is guarded: it only assigns
+// the caller as #admin when accessControlState.adminAssigned is false. Once an
+// admin exists, repeated calls are safe no-ops. This mutation fires that call
+// and, on success, invalidates the admin-status query caches so the Admin
+// Dashboard button appears for the now-admin user without a manual reload.
+export function useInitializeAccessControl() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.initializeAccessControl();
+    },
+    onSuccess: () => {
+      // Invalidate + refetch the admin-status queries so the UI refreshes
+      // immediately after the first user is promoted to admin.
+      queryClient.invalidateQueries({ queryKey: ["isCallerAdmin"] });
+      queryClient.invalidateQueries({ queryKey: ["currentUserRole"] });
+      queryClient.refetchQueries({ queryKey: ["isCallerAdmin"] });
+      queryClient.refetchQueries({ queryKey: ["currentUserRole"] });
+    },
+    onError: (error) => {
+      console.warn(
+        "useInitializeAccessControl: failed to initialize access control.",
+        error instanceof Error ? error.message : error,
+      );
     },
   });
 }
@@ -3099,6 +3161,49 @@ export function useSetEmilieNlAmazonEnabled() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["emilieNlAmazonEnabled"] });
+    },
+  });
+}
+
+// ─── Maintenance notice toggle ────────────────────────────────────────────────
+// Backend: getMaintenanceNoticeEnabled() : async Bool, setMaintenanceNoticeEnabled(Bool) : async ()
+// Default after deploy is ON (true). The popup component reads this query and
+// shows the maintenance overlay when true AND not dismissed this session.
+
+export function useGetMaintenanceNoticeEnabled() {
+  const { actor, isFetching } = useActor();
+  return useQuery<boolean>({
+    queryKey: ["maintenanceNoticeEnabled"],
+    queryFn: async () => {
+      if (!actor) return true; // safe default = ON (matches post-deploy default)
+      try {
+        return await (
+          actor as unknown as Record<string, () => Promise<boolean>>
+        ).getMaintenanceNoticeEnabled();
+      } catch {
+        return true;
+      }
+    },
+    enabled: !!actor && !isFetching,
+    staleTime: 30_000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+}
+
+export function useSetMaintenanceNoticeEnabled() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (enabled: boolean) => {
+      if (!actor) throw new Error("Actor not available");
+      return (
+        actor as unknown as Record<string, (e: boolean) => Promise<void>>
+      ).setMaintenanceNoticeEnabled(enabled);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["maintenanceNoticeEnabled"] });
+      queryClient.refetchQueries({ queryKey: ["maintenanceNoticeEnabled"] });
     },
   });
 }

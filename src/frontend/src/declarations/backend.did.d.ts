@@ -682,6 +682,12 @@ export interface _SERVICE {
     }
   >,
   'getInternationalCustomerCheckoutUrl' : ActorMethod<[], string>,
+  /**
+   * / Query: is the site-wide maintenance notice popup currently enabled?
+   * / Default true after deploy. The frontend shows a large modal overlay on
+   * / every page when this returns true; dismissal is per-session.
+   */
+  'getMaintenanceNoticeEnabled' : ActorMethod<[], boolean>,
   'getMarktplaatsButtonText' : ActorMethod<[], string>,
   'getMediumUrl' : ActorMethod<[], string>,
   'getMyNewsletterSubscription' : ActorMethod<[], [] | [NewsletterSubscriber]>,
@@ -865,6 +871,10 @@ export interface _SERVICE {
    * / Admin-only: update the emoji inflation ratio config.
    */
   'setInflationRatios' : ActorMethod<[EmojiRatioConfig], undefined>,
+  /**
+   * / Admin-only: enable or disable the site-wide maintenance notice popup.
+   */
+  'setMaintenanceNoticeEnabled' : ActorMethod<[boolean], undefined>,
   'subscribeToNewsletter' : ActorMethod<
     [string],
     { 'ok' : string } |

@@ -6,12 +6,14 @@ import {
   useGetEmilieAmazonEnabled,
   useGetEmilieNlAmazonEnabled,
   useGetEmojiSystemEnabled,
+  useGetMaintenanceNoticeEnabled,
   useSetAnnaAmazonEnabled,
   useSetAnnaSongAmazonEnabled,
   useSetCryptoSystemEnabled,
   useSetEmilieAmazonEnabled,
   useSetEmilieNlAmazonEnabled,
   useSetEmojiSystemEnabled,
+  useSetMaintenanceNoticeEnabled,
 } from "../hooks/useQueries";
 
 interface ToggleRowProps {
@@ -114,6 +116,10 @@ export default function AdminSystemControls() {
     useGetAnnaSongAmazonEnabled();
   const { data: emilieNlEnabled, isLoading: emilieNlLoading } =
     useGetEmilieNlAmazonEnabled();
+  const {
+    data: maintenanceNoticeEnabled,
+    isLoading: maintenanceNoticeLoading,
+  } = useGetMaintenanceNoticeEnabled();
 
   const setEmoji = useSetEmojiSystemEnabled();
   const setCrypto = useSetCryptoSystemEnabled();
@@ -121,6 +127,7 @@ export default function AdminSystemControls() {
   const setAnna = useSetAnnaAmazonEnabled();
   const setAnnaSong = useSetAnnaSongAmazonEnabled();
   const setEmilieNl = useSetEmilieNlAmazonEnabled();
+  const setMaintenanceNotice = useSetMaintenanceNoticeEnabled();
 
   return (
     <div className="space-y-1">
@@ -184,6 +191,15 @@ export default function AdminSystemControls() {
           loading={emilieNlLoading}
           isPending={setEmilieNl.isPending}
           onToggle={(v) => setEmilieNl.mutateAsync(v)}
+        />
+        <ToggleRow
+          ocid="system-controls.maintenance-notice-toggle"
+          label="Maintenance notice"
+          description="When ON: a large site-styled popup appears on every page informing visitors of an ongoing major website update. Visitors can dismiss it for the current session; it reappears in new sessions while ON."
+          enabled={maintenanceNoticeEnabled}
+          loading={maintenanceNoticeLoading}
+          isPending={setMaintenanceNotice.isPending}
+          onToggle={(v) => setMaintenanceNotice.mutateAsync(v)}
         />
       </div>
     </div>

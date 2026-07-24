@@ -426,6 +426,7 @@ actor {
     {var value : BilingualHomepageTextBlocks__667161996};
   stable icpConfig : {var walletAddress : Text};
   stable icpRateCache : {var fetchedAt : Int; var rate : Float};
+  stable maintenanceNotice : {var enabled : Bool};
   stable var manualDistributionCounts :
     {var root : Node__279997185<Text, Nat>; var size : Nat__93962160};
   stable var modelPhotoPanels : [_ModelPhotoPanelTombstone__442901408];

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  Activity,
   BookOpen,
   ChevronDown,
   ChevronUp,
@@ -54,6 +55,7 @@ import AdminReviewsManager from "../components/AdminReviewsManager";
 import AdminRewardsManager from "../components/AdminRewardsManager";
 import AdminRoadmapManager from "../components/AdminRoadmapManager";
 import AdminShortMessagesManager from "../components/AdminShortMessagesManager";
+import AdminStateDiagnostics from "../components/AdminStateDiagnostics";
 import AdminSystemControls from "../components/AdminSystemControls";
 import ReprocessImagesTool from "../components/ReprocessImagesTool";
 import AdminGalleryCarousel from "../components/admin/AdminGalleryCarousel";
@@ -247,6 +249,7 @@ type ModuleId =
   | "amazon-emilie-nl"
   | "announcements"
   | "systemControls"
+  | "systemDiagnostics"
   | "reprocessImages";
 
 interface ModuleConfig {
@@ -591,6 +594,12 @@ export default function AdminDashboard({
           title: "System Controls",
           icon: <Settings className="w-4 h-4" />,
           component: () => <AdminSystemControls />,
+        },
+        {
+          id: "systemDiagnostics",
+          title: "State Diagnostics",
+          icon: <Activity className="w-4 h-4" />,
+          component: () => <AdminStateDiagnostics />,
         },
         {
           id: "reprocessImages",

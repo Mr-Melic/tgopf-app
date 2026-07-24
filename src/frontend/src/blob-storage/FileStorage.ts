@@ -1,6 +1,6 @@
 import { HttpAgent } from "@icp-sdk/core/agent";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FileReference } from "../backend";
 import { loadConfig } from "../config";
 import { useActor } from "../hooks/useActor";
@@ -30,8 +30,9 @@ const inFlightRequests = new Map<string, Promise<string>>();
 // Hook to fetch the list of files
 export const useFileList = () => {
   const { actor } = useActor();
+  const queryClient = useQueryClient();
 
-  return useQuery({
+  const fileListQuery = useQuery({
     queryKey: ["fileList"],
     queryFn: async () => {
       if (!actor) return [];
@@ -46,6 +47,26 @@ export const useFileList = () => {
     staleTime: 5 * 60 * 1000, // 30 minutes
     gcTime: 60 * 60 * 1000, // 1 hour
   });
+
+  // React Query v5 removed per-query onSuccess. Watch the fileList query
+  // status transition instead: when fileList transitions to success, the
+  // ['fileList'] cache is now populated with the complete path→hash list.
+  // Any ['fileUrl', path] queries that errored out earlier (because the cache
+  // was empty when they ran and the per-path fallback also returned empty)
+  // should re-resolve against the now-populated cache. Invalidate only those
+  // in an error state to avoid disturbing queries that already resolved.
+  const isSuccess = fileListQuery.isSuccess;
+  useEffect(() => {
+    if (!isSuccess) return;
+    const cache = queryClient.getQueryCache();
+    cache.getAll().forEach((query) => {
+      if (query.queryKey[0] === "fileUrl" && query.state.status === "error") {
+        queryClient.invalidateQueries({ queryKey: query.queryKey });
+      }
+    });
+  }, [isSuccess, queryClient]);
+
+  return fileListQuery;
 };
 
 // Unified hook for getting file URLs.
@@ -143,7 +164,7 @@ export const useFileUrl = (path: string) => {
       }
       return fallbackUrl;
     },
-    enabled: !!path,
+    enabled: !!path && !!actor,
     staleTime: 5 * 60 * 1000, // 30 minutes (was POSITIVE_INFINITY but let's refresh stale content)
     gcTime: 60 * 60 * 1000, // 1 hour (extended from 30 min)
     // (FIX 5) Per-query retry override: 2 retries with exponential backoff.
